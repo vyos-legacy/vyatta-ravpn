@@ -2,6 +2,7 @@
 
 use strict;
 use lib "/opt/vyatta/share/perl5";
+use VyattaConfig;
 use VyattaL2TPConfig;
 
 my $RACONN_NAME = 'remote-access';
@@ -12,6 +13,7 @@ my $FILE_CHAP_SECRETS = '/etc/ppp/chap-secrets';
 my $FILE_PPP_OPTS = '/etc/ppp/options.xl2tpd';
 my $FILE_L2TP_OPTS = '/etc/xl2tpd/xl2tpd.conf';
 
+my $gconfig = new VyattaConfig;
 my $config = new VyattaL2TPConfig;
 my $oconfig = new VyattaL2TPConfig;
 $config->setup();
@@ -26,9 +28,29 @@ if ($config->isEmpty()) {
   exit 0;
 }
 
+# required ipsec settings
+## ipsec-interfaces
+my @ipsec_ifs = $gconfig->returnValues('vpn ipsec ipsec-interfaces interface');
+## nat-traversal
+my $nat_traversal = $gconfig->returnValue('vpn ipsec nat-traversal');
+## nat-networks
+my @nat_nets = $gconfig->listNodes('vpn ipsec nat-networks allowed-network');
+
 my ($ipsec_secrets, $ra_conn, $chap_secrets, $ppp_opts, $l2tp_conf, $err)
   = (undef, undef, undef, undef, undef, undef);
 while (1) {
+  if ((scalar @ipsec_ifs) <= 0) {
+    $err = '"vpn ipsec ipsec-interfaces" must be specified';
+    last;
+  }
+  if ($nat_traversal ne 'enable') {
+    $err = '"vpn ipsec nat-traversal" must be enabled';
+    last;
+  }
+  if ((scalar @nat_nets) <= 0) {
+    $err = '"vpn ipsec nat-networks" must be specified';
+    last;
+  }
   ($ipsec_secrets, $err) = $config->get_ipsec_secrets();
   last if (defined($err));
   ($ra_conn, $err) = $config->get_ra_conn($RACONN_NAME);

@@ -1,0 +1,15 @@
+Source: vyatta-ravpn
+Section: contrib/net
+Priority: extra
+Maintainer: An-Cheng Huang <ancheng@vyatta.com>
+Build-Depends: debhelper (>= 5), autotools-dev
+Standards-Version: 3.7.2
+
+Package: vyatta-ravpn
+Architecture: all
+Depends: perl, vyatta-cfg, vyatta-op, vyatta-cfg-vpn,
+ ppp,
+ xl2tpd,
+ pptpd
+Description: Vyatta remote access VPN configuration/operational commands
+ Vyatta configuration/operational templates and scripts for remote access VPN

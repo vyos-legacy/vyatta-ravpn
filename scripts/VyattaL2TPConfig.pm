@@ -188,12 +188,12 @@ conn $name
   rightprotoport=17/1701
   rightsubnet=vhost:%no,%priv
   auto=add
-  ike="3des-sha1,aes256-sha1"
+  ike="aes256-sha1,3des-sha1"
   ikelifetime=3600s
   dpddelay=15
   dpdtimeout=45
   dpdaction=clear
-  esp="3des-sha1,aes256-sha1"
+  esp="aes256-sha1,3des-sha1"
   rekey=no
 $cfg_delim_end
 EOS

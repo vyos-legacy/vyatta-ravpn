@@ -201,6 +201,17 @@ sub get_ip_str {
   if ($ip1 >= $ip2) {
     return (undef, 'Stop IP must be higher than start IP');
   }
+
+  my $l2tp = new VyattaConfig;
+  my $l1 = $l2tp->returnValue('vpn l2tp remote-access client-ip-pool start');
+  my $l2 = $l2tp->returnValue('vpn l2tp remote-access client-ip-pool stop');
+  if (defined($l1) && defined($l2)) {
+    my $ipl1 = new NetAddr::IP "$l1/32";
+    my $ipl2 = new NetAddr::IP "$l2/32";
+    return (undef, 'L2TP and PPTP client IP pools overlap')
+      if (!(($ip1 > $ipl2) || ($ip2 < $ipl1)));
+  }
+
   $stop =~ m/\.(\d+)$/;
   return ("$start-$1", undef);
 }

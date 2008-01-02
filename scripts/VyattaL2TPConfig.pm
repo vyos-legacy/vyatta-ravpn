@@ -3,6 +3,7 @@ package VyattaL2TPConfig;
 use strict;
 use lib "/opt/vyatta/share/perl5/";
 use VyattaConfig;
+use NetAddr::IP;
 
 my $cfg_delim_begin = '### Vyatta L2TP VPN Begin ###';
 my $cfg_delim_end = '### Vyatta L2TP VPN End ###';
@@ -250,11 +251,25 @@ EOS
 sub get_l2tp_conf {
   my ($self, $ppp_opts) = @_;
   my $oaddr = $self->{_out_addr};
-  return (undef, "Outside address not defined") if (!defined($oaddr));
+  return (undef, 'Outside address not defined') if (!defined($oaddr));
   my $cstart = $self->{_client_ip_start};
-  return (undef, "Client IP pool start not defined") if (!defined($cstart));
+  return (undef, 'Client IP pool start not defined') if (!defined($cstart));
   my $cstop = $self->{_client_ip_stop};
-  return (undef, "Client IP pool stop not defined") if (!defined($cstop));
+  return (undef, 'Client IP pool stop not defined') if (!defined($cstop));
+  my $ip1 = new NetAddr::IP "$cstart/32";
+  my $ip2 = new NetAddr::IP "$cstop/32";
+  return (undef, 'Stop IP must be higher than start IP') if ($ip1 >= $ip2);
+
+  my $pptp = new VyattaConfig;
+  my $p1 = $pptp->returnValue('vpn pptp remote-access client-ip-pool start');
+  my $p2 = $pptp->returnValue('vpn pptp remote-access client-ip-pool stop');
+  if (defined($p1) && defined($p2)) {
+    my $ipp1 = new NetAddr::IP "$p1/32";
+    my $ipp2 = new NetAddr::IP "$p2/32";
+    return (undef, 'L2TP and PPTP client IP pools overlap')
+      if (!(($ip1 > $ipp2) || ($ip2 < $ipp1)));
+  }
+
   my $str =<<EOS;
 ;$cfg_delim_begin
 [global]
@@ -280,7 +295,7 @@ sub removeCfg {
   system("sed -i '/$cfg_delim_begin/,/$cfg_delim_end/d' $file");
   if ($? >> 8) {
     print STDERR <<EOM;
-Remote access VPN configuration error: Cannot remove old config from $file.
+L2TP VPN configuration error: Cannot remove old config from $file.
 EOM
     return 0;
   }
@@ -292,7 +307,7 @@ sub writeCfg {
   my $op = ($append) ? '>>' : '>';
   if (!open(WR, "$op$file")) {
     print STDERR <<EOM;
-Remote access VPN configuration error: Cannot write config to $file.
+L2TP VPN configuration error: Cannot write config to $file.
 EOM
     return 0;
   }

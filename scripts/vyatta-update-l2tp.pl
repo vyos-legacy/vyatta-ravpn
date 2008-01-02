@@ -63,7 +63,7 @@ while (1) {
   last;
 }
 if (defined($err)) {
-  print STDERR "Remote access VPN configuration error: $err.\n";
+  print STDERR "L2TP VPN configuration error: $err.\n";
   exit 1;
 }
 

@@ -14,6 +14,11 @@ my $oconfig = new VyattaPPTPConfig;
 $config->setup();
 $oconfig->setupOrig();
 
+if (!($config->isDifferentFrom($oconfig))) {
+  # config not changed. do nothing.
+  exit 0;
+}
+
 if ($config->isEmpty()) {
   if (!$oconfig->isEmpty()) {
     # deleted => stop

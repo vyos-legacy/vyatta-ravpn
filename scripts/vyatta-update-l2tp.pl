@@ -82,10 +82,17 @@ exit 1 if (!$config->writeCfg($FILE_CHAP_SECRETS, $chap_secrets, 1, 0));
 exit 1 if (!$config->writeCfg($FILE_PPP_OPTS, $ppp_opts, 0, 0));
 exit 1 if (!$config->writeCfg($FILE_L2TP_OPTS, $l2tp_conf, 0, 0));
 
+# always need to rereadsecrets (until we can coordinate this with "ipsec")
+system("ipsec auto --rereadsecrets");
+
+if (!($config->isDifferentFrom($oconfig))) {
+  # config not actually changed. do nothing.
+  exit 0;
+}
+
 # add the ipsec connection
 system("ipsec auto --delete $RACONN_NAME >&/dev/null");
 system("ipsec auto --add $RACONN_NAME");
-system("ipsec auto --rereadsecrets");
 system("/etc/init.d/xl2tpd stop >&/dev/null");
 system("/etc/init.d/xl2tpd start");
 exit 0;

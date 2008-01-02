@@ -138,12 +138,12 @@ sub listsDiff {
 sub isDifferentFrom {
   my ($this, $that) = @_;
   
-  return 1 if ($this->{_is_empty} != $that->{_is_empty});
-  return 1 if ($this->{_psk} != $that->{_psk});
-  return 1 if ($this->{_out_addr} != $that->{_out_addr});
-  return 1 if ($this->{_out_nexthop} != $that->{_out_nexthop});
-  return 1 if ($this->{_client_ip_start} != $that->{_client_ip_start});
-  return 1 if ($this->{_client_ip_stop} != $that->{_client_ip_stop});
+  return 1 if ($this->{_is_empty} ne $that->{_is_empty});
+  return 1 if ($this->{_psk} ne $that->{_psk});
+  return 1 if ($this->{_out_addr} ne $that->{_out_addr});
+  return 1 if ($this->{_out_nexthop} ne $that->{_out_nexthop});
+  return 1 if ($this->{_client_ip_start} ne $that->{_client_ip_start});
+  return 1 if ($this->{_client_ip_stop} ne $that->{_client_ip_stop});
   return 1 if (listsDiff($this->{_auth_local}, $that->{_auth_local}));
   return 1 if (listsDiff($this->{_dns}, $that->{_dns}));
   return 1 if (listsDiff($this->{_wins}, $that->{_wins}));

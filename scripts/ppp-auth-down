@@ -1,0 +1,10 @@
+#!/bin/bash
+
+PATH=/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin
+export PATH
+
+SESSION_PATH=/opt/vyatta/etc/ravpn/sessions
+IFACE="$1"
+USER="$2"
+rm -f "${SESSION_PATH}/${USER}@${IFACE}"
+

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+PATH=/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin
+export PATH
+
+SESSION_PATH=/opt/vyatta/etc/ravpn/sessions
+IFACE="$1"
+USER="$2"
+
+# delete "old" files, if any
+declare -a old_files=($(ls ${SESSION_PATH}/*@${IFACE} 2>/dev/null))
+for old_file in "${old_files[@]}"; do
+  rm -f $old_file
+done
+
+touch "${SESSION_PATH}/${USER}@${IFACE}"
+

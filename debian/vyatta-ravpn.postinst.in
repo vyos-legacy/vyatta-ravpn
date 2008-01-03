@@ -18,3 +18,11 @@ for cfg in /etc/ipsec.d/tunnels/remote-access \
   touch $cfg
 done
 
+mkdir -p ${sysconfdir}/ravpn/sessions
+
+for auth in auth-up auth-down; do
+  [ -f /etc/ppp/$auth ] && [ ! -f /etc/ppp/$auth.vyatta-save ] \
+    && mv -f /etc/ppp/$auth /etc/ppp/$auth.vyatta-save
+  cp -f ${sysconfdir}/ravpn/ppp-$auth /etc/ppp/$auth
+done
+

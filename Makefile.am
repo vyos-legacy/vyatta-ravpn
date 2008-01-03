@@ -1,9 +1,13 @@
 cfgdir		 = $(datadir)/vyatta-cfg/templates
+opdir		 = $(datadir)/vyatta-op/templates
 share_perl5dir	 = $(datarootdir)/perl5
 ravpnconfdir = $(sysconfdir)/ravpn
+bin_sudo_usersdir = $(bindir)/sudo-users
 
 sbin_SCRIPTS = scripts/vyatta-update-l2tp.pl
 sbin_SCRIPTS += scripts/vyatta-update-pptp.pl
+
+bin_sudo_users_SCRIPTS = scripts/vyatta-show-ravpn.pl
 
 share_perl5_DATA = scripts/VyattaL2TPConfig.pm
 share_perl5_DATA += scripts/VyattaPPTPConfig.pm
@@ -17,4 +21,6 @@ cpiop = find  . ! -regex '\(.*~\|.*\.bak\|.*\.swp\|.*\#.*\#\)' -print0 | \
 install-exec-hook:
 	mkdir -p $(DESTDIR)$(cfgdir)
 	cd templates-cfg; $(cpiop) $(DESTDIR)$(cfgdir)
+	mkdir -p $(DESTDIR)$(opdir)
+	cd templates-op; $(cpiop) $(DESTDIR)$(opdir)
 

@@ -1,0 +1,3 @@
+help: Show active remote access VPN sessions
+allowed: ""
+run: sudo ${vyatta_bindir}/sudo-users/vyatta-show-ravpn.pl

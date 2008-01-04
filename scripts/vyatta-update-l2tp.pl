@@ -12,6 +12,7 @@ my $FILE_IPSEC_RACONN = "/etc/ipsec.d/tunnels/$RACONN_NAME";
 my $FILE_CHAP_SECRETS = '/etc/ppp/chap-secrets';
 my $FILE_PPP_OPTS = '/etc/ppp/options.xl2tpd';
 my $FILE_L2TP_OPTS = '/etc/xl2tpd/xl2tpd.conf';
+my $IPSEC_CTL_FILE = '/var/run/pluto/pluto.ctl';
 
 my $gconfig = new VyattaConfig;
 my $config = new VyattaL2TPConfig;
@@ -60,6 +61,8 @@ while (1) {
   ($ppp_opts, $err) = $config->get_ppp_opts();
   last if (defined($err));
   ($l2tp_conf, $err) = $config->get_l2tp_conf($FILE_PPP_OPTS);
+  last if (defined($err));
+  $err = $config->setupX509IfNecessary();
   last;
 }
 if (defined($err)) {
@@ -82,8 +85,19 @@ exit 1 if (!$config->writeCfg($FILE_CHAP_SECRETS, $chap_secrets, 1, 0));
 exit 1 if (!$config->writeCfg($FILE_PPP_OPTS, $ppp_opts, 0, 0));
 exit 1 if (!$config->writeCfg($FILE_L2TP_OPTS, $l2tp_conf, 0, 0));
 
-# always need to rereadsecrets (until we can coordinate this with "ipsec")
-system("ipsec auto --rereadsecrets");
+# wait for ipsec to settle
+my $sleep = 0;
+while (! -e $IPSEC_CTL_FILE) {
+  sleep 1;
+  if (++$sleep > 10) {
+    print STDERR "L2TP VPN configuration error: IPSec did not start.\n";
+    exit 1;
+  }
+}
+
+# always need to rereadsecrets (until we can coordinate this with "ipsec").
+# actually need rereadall since x509 settings may have been changed.
+system("ipsec auto --rereadall");
 
 if (!($config->isDifferentFrom($oconfig))) {
   # config not actually changed. do nothing.

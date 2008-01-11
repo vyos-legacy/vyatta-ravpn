@@ -50,6 +50,9 @@ exit 1 if (!$config->writeCfg($FILE_PPP_OPTS, $ppp_opts, 0, 0));
 exit 1 if (!$config->writeCfg($FILE_PPTP_OPTS, $pptp_conf, 0, 0));
 
 # restart pptp
+# XXX need to kill all pptpd instances since it does not keep track of
+# existing sessions and will start assigning IPs already in use.
+system("kill -TERM `pgrep -f pptpd`");
 system("$PPTP_INIT restart");
 exit 0;
 

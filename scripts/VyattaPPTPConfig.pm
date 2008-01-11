@@ -11,6 +11,7 @@ my $cfg_delim_end = '### Vyatta PPTP VPN End ###';
 my %fields = (
   _client_ip_start  => undef,
   _client_ip_stop   => undef,
+  _out_addr         => undef,
   _auth_local       => [],
   _dns              => [],
   _wins             => [],
@@ -41,6 +42,7 @@ sub setup {
     $self->{_is_empty} = 0;
   }
 
+  $self->{_out_addr} = $config->returnValue('outside-address');
   $self->{_client_ip_start} = $config->returnValue('client-ip-pool start');
   $self->{_client_ip_stop} = $config->returnValue('client-ip-pool stop');
 
@@ -85,6 +87,7 @@ sub setupOrig {
     $self->{_is_empty} = 0;
   }
 
+  $self->{_out_addr} = $config->returnOrigValue('outside-address');
   $self->{_client_ip_start} = $config->returnOrigValue('client-ip-pool start');
   $self->{_client_ip_stop} = $config->returnOrigValue('client-ip-pool stop');
 
@@ -131,6 +134,7 @@ sub isDifferentFrom {
   my ($this, $that) = @_;
 
   return 1 if ($this->{_is_empty} ne $that->{_is_empty});
+  return 1 if ($this->{_out_addr} ne $that->{_out_addr});
   return 1 if ($this->{_client_ip_start} ne $that->{_client_ip_start});
   return 1 if ($this->{_client_ip_stop} ne $that->{_client_ip_stop});
   return 1 if (listsDiff($this->{_auth_local}, $that->{_auth_local}));
@@ -224,11 +228,15 @@ sub get_pptp_conf {
   return (undef, "Client IP pool stop not defined") if (!defined($cstop));
   my ($ip_str, $err) = get_ip_str($cstart, $cstop);
   return (undef, "$err") if (!defined($ip_str));
+  my $listen = '';
+  if (defined($self->{_out_addr})) {
+    $listen = "listen $self->{_out_addr}\n";
+  }
   
   my $str =<<EOS;
 $cfg_delim_begin
 option $ppp_opts
-debug
+${listen}debug
 logwtmp
 localip 10.255.254.0
 remoteip $ip_str

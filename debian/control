@@ -10,6 +10,7 @@ Architecture: all
 Depends: perl, vyatta-cfg, vyatta-op, vyatta-cfg-vpn, vyatta-op-vpn,
  ppp,
  xl2tpd,
- pptpd
+ pptpd,
+ libradiusclient-ng2
 Description: Vyatta remote access VPN configuration/operational commands
  Vyatta configuration/operational templates and scripts for remote access VPN

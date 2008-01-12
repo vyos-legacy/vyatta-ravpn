@@ -14,6 +14,7 @@ share_perl5_DATA += scripts/VyattaPPTPConfig.pm
 
 ravpnconf_SCRIPTS = scripts/ppp-auth-up
 ravpnconf_SCRIPTS += scripts/ppp-auth-down
+ravpnconf_DATA = scripts/radius-dictionary.microsoft
 
 cpiop = find  . ! -regex '\(.*~\|.*\.bak\|.*\.swp\|.*\#.*\#\)' -print0 | \
   cpio -0pd

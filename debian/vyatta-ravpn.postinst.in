@@ -12,11 +12,22 @@ for init in xl2tpd pptpd; do
 done
 
 for cfg in /etc/ipsec.d/tunnels/remote-access \
+           /etc/radiusclient-ng/radiusclient-ravpn.conf \
+           /etc/radiusclient-ng/servers-ravpn \
+           /etc/radiusclient-ng/port-id-map-ravpn \
            /etc/ppp/options.xl2tpd \
            /etc/ppp/options.pptpd; do
   mkdir -p ${cfg%/*}
   touch $cfg
 done
+
+cp -f ${sysconfdir}/ravpn/radius-dictionary.microsoft \
+  /etc/radiusclient-ng/dictionary.microsoft
+cp -f /etc/radiusclient-ng/dictionary /etc/radiusclient-ng/dictionary-ravpn
+echo 'INCLUDE /etc/radiusclient-ng/dictionary.merit' \
+  >> /etc/radiusclient-ng/dictionary-ravpn
+echo 'INCLUDE /etc/radiusclient-ng/dictionary.microsoft' \
+  >> /etc/radiusclient-ng/dictionary-ravpn
 
 mkdir -p ${sysconfdir}/ravpn/sessions
 

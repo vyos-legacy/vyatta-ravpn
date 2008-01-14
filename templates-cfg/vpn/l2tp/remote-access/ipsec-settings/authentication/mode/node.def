@@ -1,6 +1,6 @@
 type: txt
-help: "Authentication mode for IPSec"
+help: "Authentication mode for IPsec"
 syntax: $(@) in "pre-shared-secret", "x509"; "Authentication mode must be \"pre-shared-secret\" or \"x509\""
 #comp_help:Possible completions:
-#  pre-shared-secret\tUse pre-shared secret for IPSec authentication
-#  x509\t\t\tUse X.509 certificate for IPSec authentication
+#  pre-shared-secret\tUse pre-shared secret for IPsec authentication
+#  x509\t\t\tUse X.509 certificate for IPsec authentication

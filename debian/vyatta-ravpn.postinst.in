@@ -12,8 +12,10 @@ for init in xl2tpd pptpd; do
 done
 
 for cfg in /etc/ipsec.d/tunnels/remote-access \
-           /etc/radiusclient-ng/radiusclient-ravpn.conf \
-           /etc/radiusclient-ng/servers-ravpn \
+           /etc/radiusclient-ng/radiusclient-pptp.conf \
+           /etc/radiusclient-ng/servers-pptp \
+           /etc/radiusclient-ng/radiusclient-l2tp.conf \
+           /etc/radiusclient-ng/servers-l2tp \
            /etc/radiusclient-ng/port-id-map-ravpn \
            /etc/ppp/options.xl2tpd \
            /etc/ppp/options.pptpd; do

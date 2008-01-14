@@ -25,7 +25,10 @@ my %fields = (
   _out_nexthop      => undef,
   _client_ip_start  => undef,
   _client_ip_stop   => undef,
+  _auth_mode        => undef,
   _auth_local       => [],
+  _auth_radius      => [],
+  _auth_radius_keys => [],
   _dns              => [],
   _wins             => [],
   _is_empty         => 1,
@@ -69,12 +72,24 @@ sub setup {
   $self->{_out_nexthop} = $config->returnValue('outside-nexthop');
   $self->{_client_ip_start} = $config->returnValue('client-ip-pool start');
   $self->{_client_ip_stop} = $config->returnValue('client-ip-pool stop');
+  $self->{_auth_mode} = $config->returnValue('authentication mode');
 
   my @users = $config->listNodes('authentication local-users username');
   foreach my $user (@users) {
     my $plvl = "authentication local-users username $user password";
     my $pass = $config->returnValue("$plvl");
     $self->{_auth_local} = [ @{$self->{_auth_local}}, $user, $pass ];
+  }
+
+  my @rservers = $config->listNodes('authentication radius-server');
+  foreach my $rserver (@rservers) {
+    my $key = $config->returnValue(
+                        "authentication radius-server $rserver key");
+    $self->{_auth_radius} = [ @{$self->{_auth_radius}}, $rserver ];
+    if (defined($key)) {
+      $self->{_auth_radius_keys} = [ @{$self->{_auth_radius_keys}}, $key ];
+    }
+    # later we will check if the two lists have the same length
   }
 
   my $tmp = $config->returnValue('dns-servers server-1');
@@ -126,12 +141,24 @@ sub setupOrig {
   $self->{_out_nexthop} = $config->returnOrigValue('outside-nexthop');
   $self->{_client_ip_start} = $config->returnOrigValue('client-ip-pool start');
   $self->{_client_ip_stop} = $config->returnOrigValue('client-ip-pool stop');
+  $self->{_auth_mode} = $config->returnOrigValue('authentication mode');
 
   my @users = $config->listOrigNodes('authentication local-users username');
   foreach my $user (@users) {
     my $plvl = "authentication local-users username $user password";
     my $pass = $config->returnOrigValue("$plvl");
     $self->{_auth_local} = [ @{$self->{_auth_local}}, $user, $pass ];
+  }
+
+  my @rservers = $config->listOrigNodes('authentication radius-server');
+  foreach my $rserver (@rservers) {
+    my $key = $config->returnOrigValue(
+                        "authentication radius-server $rserver key");
+    $self->{_auth_radius} = [ @{$self->{_auth_radius}}, $rserver ];
+    if (defined($key)) {
+      $self->{_auth_radius_keys} = [ @{$self->{_auth_radius_keys}}, $key ];
+    }
+    # later we will check if the two lists have the same length
   }
 
   my $tmp = $config->returnOrigValue('dns-servers server-1');
@@ -181,7 +208,11 @@ sub isDifferentFrom {
   return 1 if ($this->{_out_nexthop} ne $that->{_out_nexthop});
   return 1 if ($this->{_client_ip_start} ne $that->{_client_ip_start});
   return 1 if ($this->{_client_ip_stop} ne $that->{_client_ip_stop});
+  return 1 if ($this->{_auth_mode} ne $that->{_auth_mode});
   return 1 if (listsDiff($this->{_auth_local}, $that->{_auth_local}));
+  return 1 if (listsDiff($this->{_auth_radius}, $that->{_auth_radius}));
+  return 1 if (listsDiff($this->{_auth_radius_keys},
+                         $that->{_auth_radius_keys}));
   return 1 if (listsDiff($this->{_dns}, $that->{_dns}));
   return 1 if (listsDiff($this->{_wins}, $that->{_wins}));
   
@@ -230,7 +261,7 @@ sub get_ipsec_secrets {
     # PSK
     my $key = $self->{_psk};
     my $oaddr = $self->{_out_addr};
-    return (undef, "IPSec pre-shared secret not defined") if (!defined($key));
+    return (undef, "IPsec pre-shared secret not defined") if (!defined($key));
     return (undef, "Outside address not defined") if (!defined($oaddr));
     my $str =<<EOS;
 $cfg_delim_begin
@@ -300,14 +331,18 @@ EOS
 
 sub get_chap_secrets {
   my ($self) = @_;
+  return (undef, "Authentication mode must be specified")
+    if (!defined($self->{_auth_mode}));
   my @users = @{$self->{_auth_local}};
   return (undef, "Local user authentication not defined")
-    if (scalar(@users) == 0);
+    if ($self->{_auth_mode} eq 'local' && scalar(@users) == 0);
   my $str = $cfg_delim_begin;
-  while (scalar(@users) > 0) {
-    my $user = shift @users;
-    my $pass = shift @users;
-    $str .= ("\n$user\t" . 'xl2tpd' . "\t\"$pass\"\t" . '*');
+  if ($self->{_auth_mode} eq 'local') {
+    while (scalar(@users) > 0) {
+      my $user = shift @users;
+      my $pass = shift @users;
+      $str .= ("\n$user\t" . 'xl2tpd' . "\t\"$pass\"\t" . '*');
+    }
   }
   $str .= "\n$cfg_delim_end\n";
   return ($str, undef);
@@ -323,6 +358,14 @@ sub get_ppp_opts {
   }
   foreach my $w (@wins) {
     $sstr .= ('ms-wins ' . "$w\n");
+  }
+  my $rstr = '';
+  if ($self->{_auth_mode} eq 'radius') {
+    $rstr =<<EOS;
+plugin radius.so
+radius-config-file /etc/radiusclient-ng/radiusclient-l2tp.conf
+plugin radattr.so
+EOS
   }
   my $str =<<EOS;
 $cfg_delim_begin
@@ -340,8 +383,65 @@ debug
 lock
 proxyarp
 connect-delay 5000
+${rstr}$cfg_delim_end
+EOS
+  return ($str, undef);
+}
+
+sub get_radius_conf {
+  my ($self) = @_;
+  my $mode = $self->{_auth_mode};
+  return ("$cfg_delim_begin\n$cfg_delim_end\n", undef) if ($mode ne 'radius');
+
+  my @auths = @{$self->{_auth_radius}};
+  return (undef, "No Radius servers specified") if ((scalar @auths) <= 0);
+
+  my $authstr = '';
+  foreach my $auth (@auths) {
+    $authstr .= "authserver      $auth\n";
+  }
+  my $acctstr = $authstr;
+  $acctstr =~ s/auth/acct/g;
+
+  my $str =<<EOS;
+$cfg_delim_begin
+auth_order      radius
+login_tries     4
+login_timeout   60
+nologin /etc/nologin
+issue   /etc/radiusclient-ng/issue
+${authstr}${acctstr}servers         /etc/radiusclient-ng/servers-l2tp
+dictionary      /etc/radiusclient-ng/dictionary-ravpn
+login_radius    /usr/sbin/login.radius
+seqfile         /var/run/radius.seq
+mapfile         /etc/radiusclient-ng/port-id-map-ravpn
+default_realm
+radius_timeout  10
+radius_retries  3
+login_local     /bin/login
 $cfg_delim_end
 EOS
+  return ($str, undef);
+}
+
+sub get_radius_keys {
+  my ($self) = @_;
+  my $mode = $self->{_auth_mode};
+  return ("$cfg_delim_begin\n$cfg_delim_end\n", undef) if ($mode ne 'radius');
+
+  my @auths = @{$self->{_auth_radius}};
+  return (undef, "No Radius servers specified") if ((scalar @auths) <= 0);
+  my @skeys = @{$self->{_auth_radius_keys}};
+  return (undef, "Key must be specified for Radius server")
+    if ((scalar @auths) != (scalar @skeys));
+
+  my $str = $cfg_delim_begin;
+  while ((scalar @auths) > 0) {
+    my $auth = shift @auths;
+    my $skey = shift @skeys;
+    $str .= "\n$auth                $skey";
+  }
+  $str .= "\n$cfg_delim_end\n";
   return ($str, undef);
 }
 
@@ -424,7 +524,10 @@ sub print_str {
   $str .= "\n  onexthop " . $self->{_out_nexthop};
   $str .= "\n  cip_start " . $self->{_client_ip_start};
   $str .= "\n  cip_stop " . $self->{_client_ip_stop};
+  $str .= "\n  auth_mode " . $self->{_auth_mode};
   $str .= "\n  auth_local " . (join ",", @{$self->{_auth_local}});
+  $str .= "\n  auth_radius " . (join ",", @{$self->{_auth_radius}});
+  $str .= "\n  auth_radius_s " . (join ",", @{$self->{_auth_radius_keys}});
   $str .= "\n  dns " . (join ",", @{$self->{_dns}});
   $str .= "\n  wins " . (join ",", @{$self->{_wins}});
   $str .= "\n  empty " . $self->{_is_empty};

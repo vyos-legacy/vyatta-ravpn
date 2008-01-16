@@ -13,8 +13,8 @@ bin_sudo_users_SCRIPTS = scripts/vyatta-show-ravpn.pl
 share_perl5_DATA = scripts/VyattaL2TPConfig.pm
 share_perl5_DATA += scripts/VyattaPPTPConfig.pm
 
-ravpnconf_SCRIPTS = scripts/ppp-auth-up
-ravpnconf_SCRIPTS += scripts/ppp-auth-down
+ravpnconf_SCRIPTS = scripts/ppp-ip-up
+ravpnconf_SCRIPTS += scripts/ppp-ip-down
 ravpnconf_DATA = scripts/radius-dictionary.microsoft
 
 cpiop = find  . ! -regex '\(.*~\|.*\.bak\|.*\.swp\|.*\#.*\#\)' -print0 | \

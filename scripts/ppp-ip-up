@@ -5,7 +5,12 @@ export PATH
 
 SESSION_PATH=/opt/vyatta/etc/ravpn/sessions
 IFACE="$1"
-USER="$2"
+USER="$PEERNAME"
+
+# only track ravpn sessions
+if [ "$IPLOCAL" != "10.255.255.0" ] && [ "$IPLOCAL" != "10.255.254.0" ]; then
+  return 0
+fi
 
 # delete "old" files, if any
 declare -a old_files=($(ls ${SESSION_PATH}/*@${IFACE} 2>/dev/null))

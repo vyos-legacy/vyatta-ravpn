@@ -120,11 +120,11 @@ if (!($config->isDifferentFrom($oconfig))) {
 }
 
 if ($config->needsRestart($oconfig)) {
+  # kill existing PPP sessions
+  system("kill -TERM `pgrep -f 'name VyattaL2TPServer'`");
   # add the IPsec connection
   system("ipsec auto --delete $RACONN_NAME >&/dev/null");
   system("ipsec auto --add $RACONN_NAME");
-  # kill existing PPP sessions
-  system("kill -TERM `pgrep -f 'name VyattaL2TPServer'`");
   # restart L2TP server
   system("/etc/init.d/xl2tpd stop >&/dev/null");
   system("/etc/init.d/xl2tpd start");

@@ -175,6 +175,17 @@ sub isDifferentFrom {
   return 0;
 }
 
+sub needsRestart {
+  my ($this, $that) = @_;
+
+  return 1 if ($this->{_is_empty} ne $that->{_is_empty});
+  return 1 if ($this->{_out_addr} ne $that->{_out_addr});
+  return 1 if ($this->{_client_ip_start} ne $that->{_client_ip_start});
+  return 1 if ($this->{_client_ip_stop} ne $that->{_client_ip_stop});
+  
+  return 0;
+}
+
 sub isEmpty {
   my ($self) = @_;
   return $self->{_is_empty};

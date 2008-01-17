@@ -24,7 +24,7 @@ if (!($config->isDifferentFrom($oconfig))) {
 if ($config->isEmpty()) {
   if (!$oconfig->isEmpty()) {
     # deleted => stop
-    system("kill -TERM `pgrep -f pptpd`");
+    system("kill -TERM `pgrep -f 'pppd.* /etc/ppp/options\\.pptpd'`");
     system("$PPTP_INIT stop");
   }
   exit 0;
@@ -61,10 +61,12 @@ exit 1 if (!$config->writeCfg($FILE_PPTP_OPTS, $pptp_conf, 0, 0));
 exit 1 if (!$config->writeCfg($FILE_RADIUS_CONF, $radius_conf, 0, 0));
 exit 1 if (!$config->writeCfg($FILE_RADIUS_KEYS, $radius_keys, 0, 0));
 
-# restart pptp
-# XXX need to kill all pptpd instances since it does not keep track of
-# existing sessions and will start assigning IPs already in use.
-system("kill -TERM `pgrep -f pptpd`");
-system("$PPTP_INIT restart");
+if ($config->needsRestart($oconfig)) {
+  # restart pptp
+  # XXX need to kill all pptpd instances since it does not keep track of
+  # existing sessions and will start assigning IPs already in use.
+  system("kill -TERM `pgrep -f 'pppd.* /etc/ppp/options\\.pptpd'`");
+  system("$PPTP_INIT restart");
+}
 exit 0;
 

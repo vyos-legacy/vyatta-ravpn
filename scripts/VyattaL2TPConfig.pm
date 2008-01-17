@@ -219,6 +219,25 @@ sub isDifferentFrom {
   return 0;
 }
 
+sub needsRestart {
+  my ($this, $that) = @_;
+
+  return 1 if ($this->{_is_empty} ne $that->{_is_empty});
+  return 1 if ($this->{_mode} ne $that->{_mode});
+  return 1 if ($this->{_psk} ne $that->{_psk});
+  return 1 if ($this->{_x509_cacert} ne $that->{_x509_cacert});
+  return 1 if ($this->{_x509_crl} ne $that->{_x509_crl});
+  return 1 if ($this->{_x509_s_cert} ne $that->{_x509_s_cert});
+  return 1 if ($this->{_x509_s_key} ne $that->{_x509_s_key});
+  return 1 if ($this->{_x509_s_pass} ne $that->{_x509_s_pass});
+  return 1 if ($this->{_out_addr} ne $that->{_out_addr});
+  return 1 if ($this->{_out_nexthop} ne $that->{_out_nexthop});
+  return 1 if ($this->{_client_ip_start} ne $that->{_client_ip_start});
+  return 1 if ($this->{_client_ip_stop} ne $that->{_client_ip_stop});
+  
+  return 0;
+}
+
 sub isEmpty {
   my ($self) = @_;
   return $self->{_is_empty};

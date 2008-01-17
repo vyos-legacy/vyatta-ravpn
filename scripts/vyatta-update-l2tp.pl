@@ -24,8 +24,12 @@ $oconfig->setupOrig();
 
 if ($config->isEmpty()) {
   if (!$oconfig->isEmpty()) {
-    # deleted => remove ipsec conn
+    # deleted
+    # kill existing PPP sessions
+    system("kill -TERM `pgrep -f 'name VyattaL2TPServer'`");
+    # stop L2TP server
     system("/etc/init.d/xl2tpd stop");
+    # remove IPsec conn
     system("ipsec auto --delete $RACONN_NAME");
   }
   exit 0;
@@ -115,10 +119,15 @@ if (!($config->isDifferentFrom($oconfig))) {
   exit 0;
 }
 
-# add the ipsec connection
-system("ipsec auto --delete $RACONN_NAME >&/dev/null");
-system("ipsec auto --add $RACONN_NAME");
-system("/etc/init.d/xl2tpd stop >&/dev/null");
-system("/etc/init.d/xl2tpd start");
+if ($config->needsRestart($oconfig)) {
+  # add the IPsec connection
+  system("ipsec auto --delete $RACONN_NAME >&/dev/null");
+  system("ipsec auto --add $RACONN_NAME");
+  # kill existing PPP sessions
+  system("kill -TERM `pgrep -f 'name VyattaL2TPServer'`");
+  # restart L2TP server
+  system("/etc/init.d/xl2tpd stop >&/dev/null");
+  system("/etc/init.d/xl2tpd start");
+}
 exit 0;
 

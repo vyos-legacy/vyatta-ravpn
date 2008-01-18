@@ -26,7 +26,7 @@ if ($config->isEmpty()) {
   if (!$oconfig->isEmpty()) {
     # deleted
     # kill existing PPP sessions
-    system("kill -TERM `pgrep -f 'name VyattaL2TPServer'`");
+    system("kill -TERM `pgrep -f 'name VyattaL2TPServer'` >&/dev/null");
     # stop L2TP server
     system("/etc/init.d/xl2tpd stop");
     # remove IPsec conn
@@ -121,7 +121,7 @@ if (!($config->isDifferentFrom($oconfig))) {
 
 if ($config->needsRestart($oconfig)) {
   # kill existing PPP sessions
-  system("kill -TERM `pgrep -f 'name VyattaL2TPServer'`");
+  system("kill -TERM `pgrep -f 'name VyattaL2TPServer'` >&/dev/null");
   # add the IPsec connection
   system("ipsec auto --delete $RACONN_NAME >&/dev/null");
   system("ipsec auto --add $RACONN_NAME");

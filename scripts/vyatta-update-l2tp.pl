@@ -9,7 +9,7 @@ my $RACONN_NAME = 'remote-access';
 my $FILE_IPSEC_CFG = '/etc/ipsec.conf';
 my $FILE_IPSEC_SECRETS = '/etc/ipsec.secrets';
 my $FILE_IPSEC_RACONN = "/etc/ipsec.d/tunnels/$RACONN_NAME";
-my $FILE_CHAP_SECRETS = '/etc/ppp/chap-secrets';
+my $FILE_CHAP_SECRETS = '/etc/ppp/secrets/chap-ravpn';
 my $FILE_PPP_OPTS = '/etc/ppp/options.xl2tpd';
 my $FILE_L2TP_OPTS = '/etc/xl2tpd/xl2tpd.conf';
 my $IPSEC_CTL_FILE = '/var/run/pluto/pluto.ctl';
@@ -99,6 +99,14 @@ exit 1 if (!$config->writeCfg($FILE_PPP_OPTS, $ppp_opts, 0, 0));
 exit 1 if (!$config->writeCfg($FILE_L2TP_OPTS, $l2tp_conf, 0, 0));
 exit 1 if (!$config->writeCfg($FILE_RADIUS_CONF, $radius_conf, 0, 0));
 exit 1 if (!$config->writeCfg($FILE_RADIUS_KEYS, $radius_keys, 0, 0));
+
+system('cat /etc/ppp/secrets/chap-* > /etc/ppp/chap-secrets');
+if ($? >> 8) {
+  print STDERR <<EOM;
+L2TP VPN configuration error: Cannot write chap-secrets.
+EOM
+  exit 1;
+}
 
 # wait for ipsec to settle
 my $sleep = 0;

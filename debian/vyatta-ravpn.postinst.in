@@ -17,6 +17,7 @@ for cfg in /etc/ipsec.d/tunnels/remote-access \
            /etc/radiusclient-ng/radiusclient-l2tp.conf \
            /etc/radiusclient-ng/servers-l2tp \
            /etc/radiusclient-ng/port-id-map-ravpn \
+           /etc/ppp/secrets/chap-ravpn \
            /etc/ppp/options.xl2tpd \
            /etc/ppp/options.pptpd; do
   mkdir -p ${cfg%/*}

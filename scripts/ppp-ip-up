@@ -9,7 +9,7 @@ USER="$PEERNAME"
 
 # only track ravpn sessions
 if [ "$IPLOCAL" != "10.255.255.0" ] && [ "$IPLOCAL" != "10.255.254.0" ]; then
-  return 0
+  exit 0
 fi
 
 # delete "old" files, if any

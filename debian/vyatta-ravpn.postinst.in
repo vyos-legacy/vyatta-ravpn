@@ -24,6 +24,8 @@ for cfg in /etc/ipsec.d/tunnels/remote-access \
   touch $cfg
 done
 
+chmod 600 /etc/ppp/secrets/chap-ravpn
+
 cp -f ${sysconfdir}/ravpn/radius-dictionary.microsoft \
   /etc/radiusclient-ng/dictionary.microsoft
 cp -f /etc/radiusclient-ng/dictionary /etc/radiusclient-ng/dictionary-ravpn

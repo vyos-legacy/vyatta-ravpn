@@ -1,2 +1,2 @@
-help: "First IP address of the pool"
+help: First IP address of the pool
 type: ipv4

@@ -1,6 +1,6 @@
 type: txt
-help: "Authentication mode for remote access PPTP VPN"
-syntax: $(@) in "local", "radius"; "Authentication mode must be \"local\" or \"radius\""
-#comp_help:Possible completions:
-#  local         Use username/password in the configuration
-#  radius        Use Radius server
+help: Authentication mode for remote access PPTP VPN
+syntax:expression: $VAR(@) in "local", "radius"; "Authentication mode must be \"local\" or \"radius\""
+comp_help:Possible completions:
+  local         Use username/password in the configuration
+  radius        Use Radius server

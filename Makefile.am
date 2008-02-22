@@ -6,9 +6,9 @@ bin_sudo_usersdir = $(bindir)/sudo-users
 
 sbin_SCRIPTS = scripts/vyatta-update-l2tp.pl
 sbin_SCRIPTS += scripts/vyatta-update-pptp.pl
-sbin_SCRIPTS += scripts/vyatta-kick-ravpn.pl
 
 bin_sudo_users_SCRIPTS = scripts/vyatta-show-ravpn.pl
+bin_sudo_users_SCRIPTS += scripts/vyatta-kick-ravpn.pl
 
 share_perl5_DATA = scripts/VyattaL2TPConfig.pm
 share_perl5_DATA += scripts/VyattaPPTPConfig.pm

@@ -1,3 +1,18 @@
+vyatta-ravpn (0.2) unstable; urgency=low
+
+  vc4.0.0
+  [ Mark O'Brien ]
+
+
+  [ An-Cheng Huang ]
+  * convert templates to new syntax
+  * fix for bug 2699: rename op command
+  * fix clear command for operator level
+
+  [ Mark O'Brien ]
+
+ -- Mark O'Brien <mobrien@vyatta.com>  Mon, 25 Feb 2008 17:39:56 -0800
+
 vyatta-ravpn (0.1) unstable; urgency=low
 
   * Initial Release.

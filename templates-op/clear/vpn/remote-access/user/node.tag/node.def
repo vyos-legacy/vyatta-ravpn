@@ -2,6 +2,6 @@ help: Specify user name
 allowed: local -a a1;
          a1=( /opt/vyatta/etc/ravpn/sessions/*@ppp* );
          local -a a2;
-         a2=( "${a1[@]%%@*}" );
+         a2=( "${a1[@]%@*}" );
          echo -n ${a2[@]##*/};
 run: sudo ${vyatta_bindir}/sudo-users/vyatta-kick-ravpn.pl "$5"

@@ -19,7 +19,7 @@ if ((scalar @sessions) <= 0) {
 
 my @ips = ();
 foreach my $ses (@sessions) {
-  $ses =~ /^([^@]+)\@(.+)$/;
+  $ses =~ /^(.+)\@([^@]+)$/;
   my ($u, $intf) = ($1, $2);
   if ($u eq $username) {
     open(IP_ADDR, "ip addr show $intf |") or next;

@@ -22,7 +22,7 @@ my %if_time_hash = ();
 foreach my $ses (@sessions) {
   my ($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,
       $atime,$mtime,$ctime,$blksize,$blocks) = stat("$SESSION_PATH/$ses");
-  $ses =~ /^([^@]+)\@(.+)$/;
+  $ses =~ /^(.+)\@([^@]+)$/;
   $if_hash{$2} = $1;
   $if_time_hash{$2} = $mtime;
 }
@@ -87,6 +87,10 @@ foreach my $intf (keys %if_hash) {
   my $rx_p = read_stat("$sdir/rx_packets");
   my $rx_b = read_stat("$sdir/rx_bytes");
 
+  if (length($user) > 10) {
+    print "$user\n";
+    $user = '';
+  }
   printf "%-10s %-9s %-5s %-5s %-15s %6s %6s %6s %6s\n",
          $user, $tstr, $proto, $intf, $remote, $tx_p, $tx_b, $rx_p, $rx_b;
 }

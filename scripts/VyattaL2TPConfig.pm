@@ -322,6 +322,8 @@ sub get_ra_conn {
   my $onh = $self->{_out_nexthop};
   return (undef, "Outside nexthop not defined") if (!defined($onh));
   my $auth_str = "  authby=secret\n";
+  return (undef, "IPsec authentication mode not defined")
+    if (!defined($self->{_mode}));
   if ($self->{_mode} eq 'x509') {
     my $server_cert = $self->{_x509_s_cert};
     return (undef, "\"server-cert-file\" not defined")

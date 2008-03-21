@@ -7,7 +7,12 @@ Standards-Version: 3.7.2
 
 Package: vyatta-ravpn
 Architecture: all
-Depends: perl, vyatta-cfg, vyatta-op, vyatta-cfg-vpn, vyatta-op-vpn,
+Depends: perl,
+ vyatta-cfg,
+ vyatta-op,
+ vyatta-cfg-vpn,
+ vyatta-op-vpn,
+ vyatta-bash,
  ppp,
  xl2tpd,
  pptpd,

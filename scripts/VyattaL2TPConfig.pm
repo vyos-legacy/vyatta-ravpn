@@ -3,6 +3,7 @@ package VyattaL2TPConfig;
 use strict;
 use lib "/opt/vyatta/share/perl5/";
 use VyattaConfig;
+use VyattaMisc;
 use NetAddr::IP;
 
 my $cfg_delim_begin = '### Vyatta L2TP VPN Begin ###';
@@ -544,6 +545,12 @@ EOM
   print WR "$cfg";
   close WR;
   return 1;
+}
+
+sub maybeClustering {
+  my ($self, $config, @interfaces) = @_;
+  return (!(VyattaMisc::isIPinInterfaces($config, $self->{_out_addr},
+                                         @interfaces)));
 }
 
 sub print_str {

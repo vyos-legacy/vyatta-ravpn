@@ -120,14 +120,18 @@ while (! -e $IPSEC_CTL_FILE) {
 
 # always need to rereadsecrets (until we can coordinate this with "ipsec").
 # actually need rereadall since x509 settings may have been changed.
-system("ipsec auto --rereadall");
+# only do this if we are not doing clustering.
+if (!($config->maybeClustering($gconfig, @ipsec_ifs))) {
+  system("ipsec auto --rereadall");
+}
 
 if (!($config->isDifferentFrom($oconfig))) {
   # config not actually changed. do nothing.
   exit 0;
 }
 
-if ($config->needsRestart($oconfig)) {
+if (!($config->maybeClustering($gconfig, @ipsec_ifs))
+    && $config->needsRestart($oconfig)) {
   # kill existing PPP sessions
   system("kill -TERM `pgrep -f 'name VyattaL2TPServer'` >&/dev/null");
   # add the IPsec connection

@@ -246,6 +246,8 @@ sub isEmpty {
 
 sub setupX509IfNecessary {
   my ($self) = @_;
+  return (undef, "IPsec authentication mode not defined")
+    if (!defined($self->{_mode}));
   my $mode = $self->{_mode};
   if ($mode eq 'pre-shared-secret') {
     return undef;
@@ -285,6 +287,8 @@ sub setupX509IfNecessary {
 
 sub get_ipsec_secrets {
   my ($self) = @_;
+  return (undef, "IPsec authentication mode not defined")
+    if (!defined($self->{_mode}));
   my $mode = $self->{_mode};
   if ($mode eq 'pre-shared-secret') {
     # PSK

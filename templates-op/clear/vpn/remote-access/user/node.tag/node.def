@@ -1,4 +1,4 @@
-help: Specify user name
+help: Terminate specified user's current remote access VPN session(s)
 allowed: local -a a1;
          a1=( /opt/vyatta/etc/ravpn/sessions/*@ppp* );
          local -a a2;

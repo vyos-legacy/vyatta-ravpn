@@ -1,2 +1,2 @@
-help: Last IP address of the pool
+help: Set last IP address of the pool
 type: ipv4

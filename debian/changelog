@@ -1,3 +1,24 @@
+vyatta-ravpn (0.9) unstable; urgency=low
+
+  3.0.5
+
+
+ -- Mark O'Brien <mobrien@vyatta.com>  Tue, 06 May 2008 12:43:42 -0700
+
+vyatta-ravpn (0.8) unstable; urgency=low
+
+  3.0.4
+
+
+ -- Mark O'Brien <mobrien@vyatta.com>  Mon, 05 May 2008 16:41:00 -0700
+
+vyatta-ravpn (0.7) unstable; urgency=low
+
+  3.0.3
+
+
+ -- Mark O'Brien <mobrien@vyatta.com>  Tue, 29 Apr 2008 16:42:47 -0700
+
 vyatta-ravpn (0.6) unstable; urgency=low
 
   VC4.0.2

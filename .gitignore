@@ -19,6 +19,7 @@ libtool
 /debian/files
 /debian/vyatta-ravpn
 /debian/vyatta-ravpn.postinst
+/debian/vyatta-ravpn.debhelper.log
 /INSTALL
 /Makefile.in
 /Makefile

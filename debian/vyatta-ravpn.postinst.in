@@ -11,6 +11,8 @@ for init in xl2tpd pptpd; do
   update-rc.d -f ${init} remove >/dev/null
 done
 
+sed '1,/start-stop-daemon/s/start-stop-daemon --start/start-stop-daemon --start --oknodo/' -i /etc/init.d/xl2tpd
+
 for cfg in /etc/ipsec.d/tunnels/remote-access \
            /etc/radiusclient-ng/radiusclient-pptp.conf \
            /etc/radiusclient-ng/servers-pptp \

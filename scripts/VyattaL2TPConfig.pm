@@ -194,6 +194,14 @@ sub listsDiff {
   return 0;
 }
 
+sub globalIPsecChanged {
+  my $config = new VyattaConfig();
+  $config->setLevel('vpn');
+  # for now, treat it as changed if anything under ipsec changed
+  return 1 if ($config->isChanged('ipsec'));
+  return 0;
+}
+
 sub isDifferentFrom {
   my ($this, $that) = @_;
 
@@ -216,6 +224,7 @@ sub isDifferentFrom {
                          $that->{_auth_radius_keys}));
   return 1 if (listsDiff($this->{_dns}, $that->{_dns}));
   return 1 if (listsDiff($this->{_wins}, $that->{_wins}));
+  return 1 if (globalIPsecChanged());
   
   return 0;
 }
@@ -235,6 +244,7 @@ sub needsRestart {
   return 1 if ($this->{_out_nexthop} ne $that->{_out_nexthop});
   return 1 if ($this->{_client_ip_start} ne $that->{_client_ip_start});
   return 1 if ($this->{_client_ip_stop} ne $that->{_client_ip_stop});
+  return 1 if (globalIPsecChanged());
   
   return 0;
 }

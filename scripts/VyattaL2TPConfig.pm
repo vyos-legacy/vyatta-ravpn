@@ -353,13 +353,20 @@ EOS
   }
   my $str =<<EOS;
 $cfg_delim_begin
+conn $name-win
+  rightprotoport=17/1701
+  also=$name
+
+conn $name-mac
+  rightprotoport=17/%any
+  also=$name
+
 conn $name
 ${auth_str}  pfs=no
   left=$oaddr
   leftprotoport=17/1701
   leftnexthop=$onh
   right=%any
-  rightprotoport=17/%any
   rightsubnet=vhost:%no,%priv
   auto=add
   ike="aes256-sha1,3des-sha1"

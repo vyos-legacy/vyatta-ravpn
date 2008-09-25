@@ -527,7 +527,6 @@ listen-addr = $oaddr
 [lns default]
 ip range = $cstart-$cstop
 local ip = 10.255.255.0
-require chap = yes
 refuse pap = yes
 require authentication = yes
 name = VyattaL2TPServer 

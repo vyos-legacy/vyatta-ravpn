@@ -6,6 +6,8 @@ use VyattaConfig;
 use VyattaL2TPConfig;
 
 my $RACONN_NAME = 'remote-access';
+my $RACONN_NAME_WIN = "${RACONN_NAME}-win";
+my $RACONN_NAME_MAC = "${RACONN_NAME}-mac";
 my $FILE_IPSEC_CFG = '/etc/ipsec.conf';
 my $FILE_IPSEC_SECRETS = '/etc/ipsec.secrets';
 my $FILE_IPSEC_RACONN = "/etc/ipsec.d/tunnels/$RACONN_NAME";
@@ -30,7 +32,8 @@ if ($config->isEmpty()) {
     # stop L2TP server
     system("/etc/init.d/xl2tpd stop");
     # remove IPsec conn
-    system("ipsec auto --delete $RACONN_NAME");
+    system("ipsec auto --delete $RACONN_NAME_WIN");
+    system("ipsec auto --delete $RACONN_NAME_MAC");
   }
   exit 0;
 }
@@ -135,8 +138,10 @@ if (!($config->maybeClustering($gconfig, @ipsec_ifs))
   # kill existing PPP sessions
   system("kill -TERM `pgrep -f 'name VyattaL2TPServer'` >&/dev/null");
   # add the IPsec connection
-  system("ipsec auto --delete $RACONN_NAME >&/dev/null");
-  system("ipsec auto --add $RACONN_NAME");
+  system("ipsec auto --delete $RACONN_NAME_WIN >&/dev/null");
+  system("ipsec auto --delete $RACONN_NAME_MAC >&/dev/null");
+  system("ipsec auto --add $RACONN_NAME_WIN");
+  system("ipsec auto --add $RACONN_NAME_MAC");
   # restart L2TP server
   system("/etc/init.d/xl2tpd stop >&/dev/null");
   system("/etc/init.d/xl2tpd start");

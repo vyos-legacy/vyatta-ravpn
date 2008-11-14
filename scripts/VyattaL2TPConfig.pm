@@ -353,11 +353,11 @@ EOS
   }
   my $str =<<EOS;
 $cfg_delim_begin
-conn $name-win
+conn $name-win-aaa
   rightprotoport=17/1701
   also=$name
 
-conn $name-mac
+conn $name-mac-zzz
   rightprotoport=17/%any
   also=$name
 

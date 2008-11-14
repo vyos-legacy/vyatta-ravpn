@@ -6,8 +6,9 @@ use VyattaConfig;
 use VyattaL2TPConfig;
 
 my $RACONN_NAME = 'remote-access';
-my $RACONN_NAME_WIN = "${RACONN_NAME}-win";
-my $RACONN_NAME_MAC = "${RACONN_NAME}-mac";
+## XXX only the part after the last '-' affects order of conn matching!!!?
+my $RACONN_NAME_WIN = "${RACONN_NAME}-win-aaa";
+my $RACONN_NAME_MAC = "${RACONN_NAME}-mac-zzz";
 my $FILE_IPSEC_CFG = '/etc/ipsec.conf';
 my $FILE_IPSEC_SECRETS = '/etc/ipsec.secrets';
 my $FILE_IPSEC_RACONN = "/etc/ipsec.d/tunnels/$RACONN_NAME";
@@ -140,8 +141,9 @@ if (!($config->maybeClustering($gconfig, @ipsec_ifs))
   # add the IPsec connection
   system("ipsec auto --delete $RACONN_NAME_WIN >&/dev/null");
   system("ipsec auto --delete $RACONN_NAME_MAC >&/dev/null");
-  system("ipsec auto --add $RACONN_NAME_WIN");
+  ## XXX MUST add mac conn first (so that win conn will be matched first)!!!?
   system("ipsec auto --add $RACONN_NAME_MAC");
+  system("ipsec auto --add $RACONN_NAME_WIN");
   # restart L2TP server
   system("/etc/init.d/xl2tpd stop >&/dev/null");
   system("/etc/init.d/xl2tpd start");

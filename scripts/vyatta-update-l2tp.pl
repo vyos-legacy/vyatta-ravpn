@@ -2,7 +2,7 @@
 
 use strict;
 use lib "/opt/vyatta/share/perl5";
-use VyattaConfig;
+use Vyatta::Config;
 use Vyatta::L2TPConfig;
 
 my $RACONN_NAME = 'remote-access';
@@ -19,7 +19,7 @@ my $IPSEC_CTL_FILE = '/var/run/pluto/pluto.ctl';
 my $FILE_RADIUS_CONF = '/etc/radiusclient-ng/radiusclient-l2tp.conf';
 my $FILE_RADIUS_KEYS = '/etc/radiusclient-ng/servers-l2tp';
 
-my $gconfig = new VyattaConfig;
+my $gconfig = new Vyatta::Config;
 my $config = new VyattaL2TPConfig;
 my $oconfig = new VyattaL2TPConfig;
 $config->setup();

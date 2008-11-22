@@ -2,8 +2,8 @@ package Vyatta::L2TPConfig;
 
 use strict;
 use lib "/opt/vyatta/share/perl5";
-use VyattaConfig;
-use VyattaMisc;
+use Vyatta::Config;
+use Vyatta::Misc;
 use NetAddr::IP;
 
 my $cfg_delim_begin = '### Vyatta L2TP VPN Begin ###';
@@ -48,7 +48,7 @@ sub new {
 
 sub setup {
   my ( $self ) = @_;
-  my $config = new VyattaConfig;
+  my $config = new Vyatta::Config;
 
   $config->setLevel('vpn l2tp remote-access');
   my @nodes = $config->listNodes();
@@ -116,7 +116,7 @@ sub setup {
 
 sub setupOrig {
   my ( $self ) = @_;
-  my $config = new VyattaConfig;
+  my $config = new Vyatta::Config;
 
   $config->setLevel('vpn l2tp remote-access');
   my @nodes = $config->listOrigNodes();
@@ -195,7 +195,7 @@ sub listsDiff {
 }
 
 sub globalIPsecChanged {
-  my $config = new VyattaConfig();
+  my $config = new Vyatta::Config();
   $config->setLevel('vpn');
   # for now, treat it as changed if anything under ipsec changed
   return 1 if ($config->isChanged('ipsec'));
@@ -509,7 +509,7 @@ sub get_l2tp_conf {
   my $ip2 = new NetAddr::IP "$cstop/32";
   return (undef, 'Stop IP must be higher than start IP') if ($ip1 >= $ip2);
 
-  my $pptp = new VyattaConfig;
+  my $pptp = new Vyatta::Config;
   my $p1 = $pptp->returnValue('vpn pptp remote-access client-ip-pool start');
   my $p2 = $pptp->returnValue('vpn pptp remote-access client-ip-pool stop');
   if (defined($p1) && defined($p2)) {
@@ -569,7 +569,7 @@ EOM
 
 sub maybeClustering {
   my ($self, $config, @interfaces) = @_;
-  return (!(VyattaMisc::isIPinInterfaces($config, $self->{_out_addr},
+  return (!(Vyatta::Misc::isIPinInterfaces($config, $self->{_out_addr},
                                          @interfaces)));
 }
 

@@ -2,7 +2,7 @@ package Vyatta::PPTPConfig;
 
 use strict;
 use lib "/opt/vyatta/share/perl5";
-use VyattaConfig;
+use Vyatta::Config;
 use NetAddr::IP;
 
 my $cfg_delim_begin = '### Vyatta PPTP VPN Begin ###';
@@ -34,7 +34,7 @@ sub new {
 
 sub setup {
   my ( $self ) = @_;
-  my $config = new VyattaConfig;
+  my $config = new Vyatta::Config;
 
   $config->setLevel('vpn pptp remote-access');
   my @nodes = $config->listNodes();
@@ -91,7 +91,7 @@ sub setup {
 
 sub setupOrig {
   my ( $self ) = @_;
-  my $config = new VyattaConfig;
+  my $config = new Vyatta::Config;
 
   $config->setLevel('vpn pptp remote-access');
   my @nodes = $config->listOrigNodes();
@@ -317,7 +317,7 @@ sub get_ip_str {
     return (undef, 'Stop IP must be higher than start IP');
   }
 
-  my $l2tp = new VyattaConfig;
+  my $l2tp = new Vyatta::Config;
   my $l1 = $l2tp->returnValue('vpn l2tp remote-access client-ip-pool start');
   my $l2 = $l2tp->returnValue('vpn l2tp remote-access client-ip-pool stop');
   if (defined($l1) && defined($l2)) {

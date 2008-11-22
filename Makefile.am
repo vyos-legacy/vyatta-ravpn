@@ -1,6 +1,6 @@
 cfgdir		 = $(datadir)/vyatta-cfg/templates
 opdir		 = $(datadir)/vyatta-op/templates
-share_perl5dir	 = $(datarootdir)/perl5
+share_perl5dir	 = $(datarootdir)/perl5/Vyatta
 ravpnconfdir = $(sysconfdir)/ravpn
 bin_sudo_usersdir = $(bindir)/sudo-users
 
@@ -10,8 +10,8 @@ sbin_SCRIPTS += scripts/vyatta-show-ravpn.pl
 
 bin_sudo_users_SCRIPTS = scripts/vyatta-kick-ravpn.pl
 
-share_perl5_DATA = scripts/VyattaL2TPConfig.pm
-share_perl5_DATA += scripts/VyattaPPTPConfig.pm
+share_perl5_DATA = lib/Vyatta/L2TPConfig.pm
+share_perl5_DATA += lib/Vyatta/PPTPConfig.pm
 
 ravpnconf_SCRIPTS = scripts/ppp-ip-up
 ravpnconf_SCRIPTS += scripts/ppp-ip-down

@@ -2,7 +2,7 @@
 
 use strict;
 use lib "/opt/vyatta/share/perl5";
-use VyattaPPTPConfig;
+use Vyatta::PPTPConfig;
 
 my $FILE_CHAP_SECRETS = '/etc/ppp/secrets/chap-ravpn';
 my $FILE_PPP_OPTS = '/etc/ppp/options.pptpd';

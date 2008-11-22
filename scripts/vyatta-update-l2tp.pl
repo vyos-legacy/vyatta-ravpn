@@ -3,7 +3,7 @@
 use strict;
 use lib "/opt/vyatta/share/perl5";
 use VyattaConfig;
-use VyattaL2TPConfig;
+use Vyatta::L2TPConfig;
 
 my $RACONN_NAME = 'remote-access';
 ## XXX only the part after the last '-' affects order of conn matching!!!?

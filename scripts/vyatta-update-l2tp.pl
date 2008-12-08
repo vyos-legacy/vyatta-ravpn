@@ -20,8 +20,8 @@ my $FILE_RADIUS_CONF = '/etc/radiusclient-ng/radiusclient-l2tp.conf';
 my $FILE_RADIUS_KEYS = '/etc/radiusclient-ng/servers-l2tp';
 
 my $gconfig = new Vyatta::Config;
-my $config = new VyattaL2TPConfig;
-my $oconfig = new VyattaL2TPConfig;
+my $config = new Vyatta::L2TPConfig;
+my $oconfig = new Vyatta::L2TPConfig;
 $config->setup();
 $oconfig->setupOrig();
 

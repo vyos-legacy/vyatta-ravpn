@@ -11,8 +11,8 @@ my $PPTP_INIT = '/etc/init.d/pptpd';
 my $FILE_RADIUS_CONF = '/etc/radiusclient-ng/radiusclient-pptp.conf';
 my $FILE_RADIUS_KEYS = '/etc/radiusclient-ng/servers-pptp';
 
-my $config = new VyattaPPTPConfig;
-my $oconfig = new VyattaPPTPConfig;
+my $config = new Vyatta::PPTPConfig;
+my $oconfig = new Vyatta::PPTPConfig;
 $config->setup();
 $oconfig->setupOrig();
 

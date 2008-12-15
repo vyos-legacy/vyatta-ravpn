@@ -1,3 +1,22 @@
+vyatta-ravpn (0.12.1) unstable; urgency=low
+
+  [ An-Cheng Huang ]
+  * add support for development build
+
+  [ Stephen Hemminger ]
+  * Rename VyattaL2TP to Vyatta::L2TP
+  * Convert to Vyatta::
+
+  [ Stig Thormodsrud ]
+  * Convert to use Vyatta::
+  * Convert to Vyatta::
+
+  [ An-Cheng Huang ]
+  * update maintainer information
+  * "files" file should be removed before package build
+
+ -- An-Cheng Huang <ancheng@build-vm.localdomain>  Mon, 15 Dec 2008 15:13:48 -0800
+
 vyatta-ravpn (0.12) unstable; urgency=low
 
 	  3.2.0

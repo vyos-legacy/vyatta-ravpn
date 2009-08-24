@@ -1,3 +1,9 @@
+vyatta-ravpn (0.12.4) unstable; urgency=low
+
+  * add description field for L2TP remote-access vpn settings
+
+ -- Mohit Mehta <mohit.mehta@vyatta.com>  Mon, 24 Aug 2009 15:35:02 -0700
+
 vyatta-ravpn (0.12.3) unstable; urgency=low
 
   * add support for disabling L2TP remote-access user

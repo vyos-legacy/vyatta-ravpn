@@ -6,6 +6,7 @@ export PATH
 SESSION_PATH=/opt/vyatta/etc/ravpn/sessions
 IFACE="$1"
 USER="$PEERNAME"
+PID="$PPPD_PID"
 
 # only track ravpn sessions
 if [ "$IPLOCAL" != "10.255.255.0" ] && [ "$IPLOCAL" != "10.255.254.0" ]; then
@@ -18,5 +19,5 @@ for old_file in "${old_files[@]}"; do
   rm -f $old_file
 done
 
-touch "${SESSION_PATH}/${USER}@${IFACE}"
+echo -n "$PID" >"${SESSION_PATH}/${USER}@${IFACE}"
 

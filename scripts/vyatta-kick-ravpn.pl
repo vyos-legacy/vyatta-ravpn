@@ -17,27 +17,22 @@ if ((scalar @sessions) <= 0) {
   exit 1;
 }
 
-my @ips = ();
+my @pids = ();
 foreach my $ses (@sessions) {
   $ses =~ /^(.+)\@([^@]+)$/;
   my ($u, $intf) = ($1, $2);
   if ($u eq $username) {
-    open(IP_ADDR, "ip addr show $intf |") or next;
-    my $ip = undef;
-    while (<IP_ADDR>) {
-      next if (!/\s*inet/);
-      /inet [\d.]+ peer ([\d.]+)\/32 /;
-      $ip = $1;
-    }
-    close(IP_ADDR);
-    if (defined($ip)) {
-      push @ips, $ip;
-    }
+    open(SFILE, "$SESSION_PATH/$ses") or next;
+    my $pid = <SFILE>;
+    close(SFILE);
+    chomp($pid);
+    next if (!($pid =~ /^\d+$/));
+    push @pids, $pid;
   }
 }
 
-foreach my $ip (@ips) {
-  system("pkill -TERM -f 'pppd .*:$ip '");
+foreach my $pid (@pids) {
+  kill('TERM', $pid);
 }
 
 exit 0;

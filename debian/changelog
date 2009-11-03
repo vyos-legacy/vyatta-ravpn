@@ -1,3 +1,10 @@
+vyatta-ravpn (0.12.5) unstable; urgency=low
+
+  [ Sergey ]
+  * fix for bug 5052
+
+ -- An-Cheng Huang <ancheng@vyatta.com>  Mon, 02 Nov 2009 16:12:24 -0800
+
 vyatta-ravpn (0.12.4) unstable; urgency=low
 
   * add description field for L2TP remote-access vpn settings

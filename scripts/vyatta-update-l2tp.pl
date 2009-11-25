@@ -15,7 +15,7 @@ my $FILE_IPSEC_RACONN = "/etc/ipsec.d/tunnels/$RACONN_NAME";
 my $FILE_CHAP_SECRETS = '/etc/ppp/secrets/chap-ravpn';
 my $FILE_PPP_OPTS = '/etc/ppp/options.xl2tpd';
 my $FILE_L2TP_OPTS = '/etc/xl2tpd/xl2tpd.conf';
-my $IPSEC_CTL_FILE = '/var/run/pluto/pluto.ctl';
+my $IPSEC_CTL_FILE = '/var/run/pluto.ctl';
 my $FILE_RADIUS_CONF = '/etc/radiusclient-ng/radiusclient-l2tp.conf';
 my $FILE_RADIUS_KEYS = '/etc/radiusclient-ng/servers-l2tp';
 
@@ -33,8 +33,9 @@ if ($config->isEmpty()) {
     # stop L2TP server
     system("/etc/init.d/xl2tpd stop");
     # remove IPsec conn
-    system("ipsec auto --delete $RACONN_NAME_WIN");
-    system("ipsec auto --delete $RACONN_NAME_MAC");
+    system("ipsec whack --delete --name $RACONN_NAME_WIN >&/dev/null");
+    system("ipsec whack --delete --name $RACONN_NAME_MAC >&/dev/null");
+    system ("ipsec update");
   }
   exit 0;
 }
@@ -126,7 +127,7 @@ while (! -e $IPSEC_CTL_FILE) {
 # actually need rereadall since x509 settings may have been changed.
 # only do this if we are not doing clustering.
 if (!($config->maybeClustering($gconfig, @ipsec_ifs))) {
-  system("ipsec auto --rereadall");
+  system("ipsec rereadall >&/dev/null");
 }
 
 if (!($config->isDifferentFrom($oconfig))) {
@@ -138,12 +139,11 @@ if (!($config->maybeClustering($gconfig, @ipsec_ifs))
     && $config->needsRestart($oconfig)) {
   # kill existing PPP sessions
   system("kill -TERM `pgrep -f 'name VyattaL2TPServer'` >&/dev/null");
-  # add the IPsec connection
-  system("ipsec auto --delete $RACONN_NAME_WIN >&/dev/null");
-  system("ipsec auto --delete $RACONN_NAME_MAC >&/dev/null");
-  ## XXX MUST add mac conn first (so that win conn will be matched first)!!!?
-  system("ipsec auto --add $RACONN_NAME_MAC");
-  system("ipsec auto --add $RACONN_NAME_WIN");
+  # delete connections descriptions, established SAs or initiated negotiations
+  system("ipsec whack --delete --name $RACONN_NAME_WIN >&/dev/null");
+  system("ipsec whack --delete --name $RACONN_NAME_MAC >&/dev/null");
+  # update ipsec.conf configuration on running pluto daemon
+  system ("ipsec update");
   # restart L2TP server
   system("/etc/init.d/xl2tpd stop >&/dev/null");
   system("/etc/init.d/xl2tpd start");

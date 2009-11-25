@@ -375,12 +375,12 @@ ${auth_str}  pfs=no
   right=%any
   rightsubnet=vhost:%no,%priv
   auto=add
-  ike="aes256-sha1,3des-sha1"
+  ike=aes256-sha1,3des-sha1!
   ikelifetime=3600s
   dpddelay=15
   dpdtimeout=45
   dpdaction=clear
-  esp="aes256-sha1,3des-sha1"
+  esp=aes256-sha1,3des-sha1!
   rekey=no
 $cfg_delim_end
 EOS

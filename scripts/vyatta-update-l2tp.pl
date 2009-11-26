@@ -31,11 +31,9 @@ if ($config->isEmpty()) {
     # kill existing PPP sessions
     system("kill -TERM `pgrep -f 'name VyattaL2TPServer'` >&/dev/null");
     # stop L2TP server
-    system("/etc/init.d/xl2tpd stop");
-    # remove IPsec conn
-    system("ipsec whack --delete --name $RACONN_NAME_WIN >&/dev/null");
-    system("ipsec whack --delete --name $RACONN_NAME_MAC >&/dev/null");
-    system ("ipsec update");
+    system("/etc/init.d/xl2tpd stop >&/dev/null");
+    # remove remote-access vpn connections
+    system ("ipsec update >&/dev/null");
   }
   exit 0;
 }
@@ -139,14 +137,11 @@ if (!($config->maybeClustering($gconfig, @ipsec_ifs))
     && $config->needsRestart($oconfig)) {
   # kill existing PPP sessions
   system("kill -TERM `pgrep -f 'name VyattaL2TPServer'` >&/dev/null");
-  # delete connections descriptions, established SAs or initiated negotiations
-  system("ipsec whack --delete --name $RACONN_NAME_WIN >&/dev/null");
-  system("ipsec whack --delete --name $RACONN_NAME_MAC >&/dev/null");
-  # update ipsec.conf configuration on running pluto daemon
-  system ("ipsec update");
+  # update ipsec.conf for remote-access connections
+  system ("ipsec update >&/dev/null");
   # restart L2TP server
   system("/etc/init.d/xl2tpd stop >&/dev/null");
-  system("/etc/init.d/xl2tpd start");
+  system("/etc/init.d/xl2tpd start >&/dev/null");
 }
 exit 0;
 

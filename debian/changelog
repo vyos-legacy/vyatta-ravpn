@@ -1,3 +1,9 @@
+vyatta-ravpn (0.12.8) unstable; urgency=low
+
+  * skip used tags
+
+ -- An-Cheng Huang <ancheng@vyatta.com>  Wed, 02 Dec 2009 10:47:34 -0800
+
 vyatta-ravpn (0.12.5) unstable; urgency=low
 
   [ Sergey ]

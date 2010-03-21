@@ -26,6 +26,14 @@ for cfg in /etc/ipsec.d/tunnels/remote-access \
   touch $cfg
 done
 
+# fix Xl2tpd init script that doesn't create its startup directory
+xl2tpd_init=/etc/init.d/xl2tpd
+if [ -f $xl2tpd_init ] &&
+    ! grep -q 'mkdir -p /var/run/xl2tpd' $xl2tpd_init ; then
+    sed -i -e '/test -x $DAEMON || exit 0/a \
+mkdir -p /var/run/xl2tpd' $xl2tpd_init
+fi
+
 chmod 600 /etc/ppp/secrets/chap-ravpn
 
 cp -f ${sysconfdir}/ravpn/radius-dictionary.microsoft \

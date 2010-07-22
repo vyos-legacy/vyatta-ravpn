@@ -1,5 +1,5 @@
 type: txt
-help: Set authentication mode for remote access L2TP VPN
+help: Authentication mode for remote access L2TP VPN
 syntax:expression: $VAR(@) in "local", "radius"; "Authentication mode must be \"local\" or \"radius\""
 comp_help:Possible completions:
   local         Use username/password in the configuration

@@ -1,3 +1,9 @@
+vyatta-ravpn (0.12.13) unstable; urgency=low
+
+  * remove verb usage from begining of help strings
+
+ -- Mohit Mehta <mohit.mehta@vyatta.com>  Thu, 22 Jul 2010 11:38:50 -0700
+
 vyatta-ravpn (0.12.12) unstable; urgency=low
 
   * Fix Bug 5544 IPsec phase 1 for L2TP session fails after changing

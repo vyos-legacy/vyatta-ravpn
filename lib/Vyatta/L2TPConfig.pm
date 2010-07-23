@@ -271,8 +271,6 @@ sub setupX509IfNecessary {
 
   return "\"ca-cert-file\" must be defined for X.509\n"
     if (!defined($self->{_x509_cacert}));
-  return "\"crl-file\" must be defined for X.509\n"
-    if (!defined($self->{_x509_crl}));
   return "\"server-cert-file\" must be defined for X.509\n"
     if (!defined($self->{_x509_s_cert}));
   return "\"server-key-file\" must be defined for X.509\n"
@@ -280,19 +278,22 @@ sub setupX509IfNecessary {
 
   return "Invalid ca-cert-file \"$self->{_x509_cacert}\""
     if (! -f $self->{_x509_cacert});
-  return "Invalid crl-file \"$self->{_x509_crl}\""
-    if (! -f $self->{_x509_crl});
   return "Invalid server-cert-file \"$self->{_x509_s_cert}\""
     if (! -f $self->{_x509_s_cert});
   return "Invalid server-key-file \"$self->{_x509_s_key}\""
     if (! -f $self->{_x509_s_key});
 
+  if (defined($self->{_x509_crl})) {
+    return "Invalid crl-file \"$self->{_x509_crl}\""
+      if (! -f $self->{_x509_crl});
+    system("cp -f $self->{_x509_crl} $CRL_PATH/");
+    return "Cannot copy $self->{_x509_crl}" if ($? >> 8);
+  }
+
   # perform more validation of the files
 
   system("cp -f $self->{_x509_cacert} $CA_CERT_PATH/");
   return "Cannot copy $self->{_x509_cacert}" if ($? >> 8);
-  system("cp -f $self->{_x509_crl} $CRL_PATH/");
-  return "Cannot copy $self->{_x509_crl}" if ($? >> 8);
   system("cp -f $self->{_x509_s_cert} $SERVER_CERT_PATH/");
   return "Cannot copy $self->{_x509_s_cert}" if ($? >> 8);
   system("cp -f $self->{_x509_s_key} $SERVER_KEY_PATH/");
@@ -324,12 +325,11 @@ EOS
     my $key_pass = $self->{_x509_s_pass};
     return (undef, "\"server-key-file\" not defined")
       if (!defined($key_file));
-    return (undef, "\"server-key-password\" not defined")
-      if (!defined($key_pass));
+    my $pstr = (defined($key_pass) ? " \"$key_pass\"" : '');
     $key_file =~ s/^.*(\/[^\/]+)$/${SERVER_KEY_PATH}$1/;
     my $str =<<EOS;
 $cfg_delim_begin
-: RSA $key_file "$key_pass"
+: RSA ${key_file}$pstr
 $cfg_delim_end
 EOS
     return ($str, undef);

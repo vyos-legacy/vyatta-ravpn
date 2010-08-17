@@ -1,3 +1,10 @@
+vyatta-ravpn (0.12.15) unstable; urgency=low
+
+  * fix for bug 5401
+  * update help text to use val_help
+
+ -- An-Cheng Huang <ancheng@vyatta.com>  Tue, 17 Aug 2010 15:31:35 -0700
+
 vyatta-ravpn (0.12.14) unstable; urgency=low
 
   * UNRELEASED

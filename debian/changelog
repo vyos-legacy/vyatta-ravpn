@@ -1,3 +1,9 @@
+vyatta-ravpn (0.12.16) unstable; urgency=low
+
+  * UNRELEASED
+
+ -- An-Cheng Huang <ancheng@vyatta.com>  Thu, 02 Sep 2010 18:30:38 -0700
+
 vyatta-ravpn (0.12.15) unstable; urgency=low
 
   * fix for bug 5401

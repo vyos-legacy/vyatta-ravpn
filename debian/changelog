@@ -1,3 +1,10 @@
+vyatta-ravpn (0.12.17) unstable; urgency=low
+
+  * remove deprecated linda file
+  * update gitignore
+
+ -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Mon, 29 Nov 2010 09:34:04 -0800
+
 vyatta-ravpn (0.12.16) unstable; urgency=low
 
   * UNRELEASED

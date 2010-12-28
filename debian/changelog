@@ -1,3 +1,9 @@
+vyatta-ravpn (0.12.18) unstable; urgency=low
+
+  * new branch
+
+ -- An-Cheng Huang <ancheng@vyatta.com>  Tue, 28 Dec 2010 13:51:59 -0800
+
 vyatta-ravpn (0.12.17) unstable; urgency=low
 
   * remove deprecated linda file

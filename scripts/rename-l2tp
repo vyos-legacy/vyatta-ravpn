@@ -1,0 +1,54 @@
+#!/bin/bash
+#
+# Script to re-name ppp interface being used by l2tp to have
+# a form: l2tp<unit>.
+#
+# The name of the current ppp interface is passed in as argument 1.  The full
+# name that we are to change it to is passed in as argument 6.  We don't
+# use the rest of the arguments.
+#
+# We do this before device is brought up so that later scripts
+# can see the correct name, and the interface doesn't have to be
+# bounced
+
+OLD_IFNAME=$1
+IFPREFIX=$6
+
+# We have to get a list of currently used indicies since these 
+# are dynamic interfaces
+IFINDICIES=$(ip a | grep '.*: l2tp' | awk {' print $2 '} | sed -e s/://g -e s/l2tp//g | sort)
+
+# The ppp daemon executes this script for all ppp interfaces, even those
+# unrelated to l2tp.  We want to change the names only of
+# interface being used by l2tp.
+#
+if [ "$IFPREFIX" != "l2tp" ]; then
+    # its not a l2tp
+    exit 0;
+fi
+
+# if we got some indicies for connected peers so we loop on them to determine
+#     the next available l2tp index. 
+# The loop prevents us from counting up if only one client is connected. 
+# For instance the old way if a there was only one client was connected to 
+#     l2tp85 the new client would be issued l2tp86 instead this way the new 
+#     client gets l2tp0 and the next l2tp1, etc.
+if [ -n "$IFINDICIES" ]; then
+	MYINDEX=0
+	for i in $IFINDICIES; do
+	    if [ $MYINDEX = $i ]; then
+		MYINDEX=$(($MYINDEX + 1))
+	    else 
+		break
+	    fi
+	done
+        NEW_IFNAME=$IFPREFIX$MYINDEX
+else
+        MYINDEX=0
+        NEW_IFNAME=$IFPREFIX$MYINDEX
+fi
+
+# Re-name the interface.  Log all errors to syslog.
+logger -p debug -t "vyatta xl2tpd"  Re-naming $OLD_IFNAME to $NEW_IFNAME
+ip link set dev $OLD_IFNAME name $NEW_IFNAME | \
+    logger -p debug -t "vyatta xl2tpd"

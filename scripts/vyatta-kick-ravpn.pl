@@ -10,7 +10,13 @@ if (!opendir(SDIR, "$SESSION_PATH")) {
   print STDERR "Cannot get session information\n";
   exit 1;
 }
-my @sessions = grep { /\@ppp/ } readdir(SDIR);
+my @l2tpsessions = grep { /\@l2tp/ } readdir(SDIR);
+if (!opendir(SDIR, "$SESSION_PATH")) {
+  print STDERR "Cannot get session information\n";
+  exit 1;
+}
+my @pptpsessions = grep { /\@pptp/ } readdir(SDIR);
+my @sessions = (@l2tpsessions, @pptpsessions);
 closedir(SDIR);
 if ((scalar @sessions) <= 0) {
   # no sessions

@@ -25,4 +25,11 @@ install-exec-hook:
 	cd templates-cfg; $(cpiop) $(DESTDIR)$(cfgdir)
 	mkdir -p $(DESTDIR)$(opdir)
 	cd templates-op; $(cpiop) $(DESTDIR)$(opdir)
+	mkdir -p $(DESTDIR)/etc/ppp/ip-pre-up.d \
+	         $(DESTDIR)/etc/ppp/ip-up.d \
+	         $(DESTDIR)/etc/ppp/ip-down.d
+	cp scripts/rename-l2tp $(DESTDIR)/etc/ppp/ip-pre-up.d/0004rename-l2tp
+	chmod 755 $(DESTDIR)/etc/ppp/ip-pre-up.d/0004rename-l2tp
+	cp scripts/rename-pptp $(DESTDIR)/etc/ppp/ip-pre-up.d/0005rename-pptp
+	chmod 755 $(DESTDIR)/etc/ppp/ip-pre-up.d/0005rename-pptp
 

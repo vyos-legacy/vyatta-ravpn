@@ -435,6 +435,7 @@ EOS
   my $str =<<EOS;
 $cfg_delim_begin
 name xl2tpd
+ipparam l2tp
 ipcp-accept-local
 ipcp-accept-remote
 ${sstr}noccp

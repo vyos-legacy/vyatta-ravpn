@@ -350,7 +350,7 @@ $cfg_delim_begin
 option $ppp_opts
 ${listen}debug
 noipparam
-#logwtmp
+logwtmp
 localip 10.255.254.0
 remoteip $ip_str
 $cfg_delim_end

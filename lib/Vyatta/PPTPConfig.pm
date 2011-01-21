@@ -54,7 +54,12 @@ sub setup {
   foreach my $user (@users) {
     my $plvl = "authentication local-users username $user password";
     my $pass = $config->returnValue("$plvl");
-    $self->{_auth_local} = [ @{$self->{_auth_local}}, $user, $pass ];
+    my $dlvl = "authentication local-users username $user disable";
+    my $disable = 'enable';
+    $disable = 'disable' if $config->exists("$dlvl");
+    my $ilvl = "authentication local-users username $user static-ip";
+    my $ip = $config->returnValue("$ilvl");
+    $self->{_auth_local} = [ @{$self->{_auth_local}}, $user, $pass, $disable, $ip ];
   }
   
   my @rservers = $config->listNodes('authentication radius-server');
@@ -110,8 +115,13 @@ sub setupOrig {
   my @users = $config->listOrigNodes('authentication local-users username');
   foreach my $user (@users) {
     my $plvl = "authentication local-users username $user password";
-    my $pass = $config->returnOrigValue("$plvl");
-    $self->{_auth_local} = [ @{$self->{_auth_local}}, $user, $pass ];
+    my $pass = $config->returnValue("$plvl");
+    my $dlvl = "authentication local-users username $user disable";
+    my $disable = 'enable';
+    $disable = 'disable' if $config->existsOrig("$dlvl");
+    my $ilvl = "authentication local-users username $user static-ip";
+    my $ip = $config->returnValue("$ilvl");
+    $self->{_auth_local} = [ @{$self->{_auth_local}}, $user, $pass, $disable, $ip ];
   }
   
   my @rservers = $config->listOrigNodes('authentication radius-server');
@@ -203,7 +213,20 @@ sub get_chap_secrets {
     while (scalar(@users) > 0) {
       my $user = shift @users;
       my $pass = shift @users;
-      $str .= ("\n$user\t" . 'pptpd' . "\t\"$pass\"\t" . '*');
+      my $disable = shift @users;
+      my $ip = shift @users;
+      if ($disable eq 'disable') {
+        my $cmd = "/opt/vyatta/bin/sudo-users/vyatta-kick-ravpn.pl" .
+                  " \"$user\" 2> /dev/null";
+        system ("$cmd");
+      } else {
+        if ($ip eq '') {
+            $str .= ("\n$user\t" . 'pptpd' . "\t\"$pass\"\t" . '*');
+        }
+        else {
+            $str .= ("\n$user\t" . 'pptpd' . "\t\"$pass\"\t" . "$ip");
+        }
+      }
     }
   }
   $str .= "\n$cfg_delim_end\n";

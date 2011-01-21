@@ -82,7 +82,9 @@ sub setup {
     my $dlvl = "authentication local-users username $user disable";
     my $disable = 'enable';
     $disable = 'disable' if $config->exists("$dlvl");
-    $self->{_auth_local} = [ @{$self->{_auth_local}}, $user, $pass , $disable ];
+    my $ilvl = "authentication local-users username $user static-ip";
+    my $ip = $config->returnValue("$ilvl");
+    $self->{_auth_local} = [ @{$self->{_auth_local}}, $user, $pass, $disable, $ip ];
   }
 
   my @rservers = $config->listNodes('authentication radius-server');
@@ -154,7 +156,9 @@ sub setupOrig {
     my $dlvl = "authentication local-users username $user disable";
     my $disable = 'enable';
     $disable = 'disable' if $config->existsOrig("$dlvl");
-    $self->{_auth_local} = [ @{$self->{_auth_local}}, $user, $pass, $disable ];
+    my $ilvl = "authentication local-users username $user static-ip";
+    my $ip = $config->returnValue("$ilvl");
+    $self->{_auth_local} = [ @{$self->{_auth_local}}, $user, $pass, $disable, $ip ];
   }
 
   my @rservers = $config->listOrigNodes('authentication radius-server');
@@ -400,12 +404,18 @@ sub get_chap_secrets {
       my $user = shift @users;
       my $pass = shift @users;
       my $disable = shift @users;
+      my $ip = shift @users;
       if ($disable eq 'disable') {
         my $cmd = "/opt/vyatta/bin/sudo-users/vyatta-kick-ravpn.pl" . 
                   " \"$user\" 2> /dev/null";
         system ("$cmd");
       } else {
-        $str .= ("\n$user\t" . 'xl2tpd' . "\t\"$pass\"\t" . '*');
+        if ($ip eq '') {
+            $str .= ("\n$user\t" . 'xl2tpd' . "\t\"$pass\"\t" . '*');
+        }
+        else {
+            $str .= ("\n$user\t" . 'xl2tpd' . "\t\"$pass\"\t" . "$ip");
+        }
       }
     }
   }

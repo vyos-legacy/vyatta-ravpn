@@ -1,3 +1,11 @@
+vyatta-ravpn (0.12.20) unstable; urgency=low
+
+  * Bugfix: 5313 and 5547: Added the ability to define a MTU for pptp
+    and l2tp connections, as well as define an ike lifetime for
+    l2tp/ipsec connections
+
+ -- John Southworth <john.southworth@vyatta.com>  Thu, 27 Jan 2011 14:06:48 -0600
+
 vyatta-ravpn (0.12.19) unstable; urgency=low
 
   [ John Southworth ]

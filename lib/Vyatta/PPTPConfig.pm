@@ -348,7 +348,6 @@ sub get_pptp_conf {
 $cfg_delim_begin
 option $ppp_opts
 ${listen}debug
-logwtmp
 localip 10.255.254.0
 remoteip $ip_str
 $cfg_delim_end

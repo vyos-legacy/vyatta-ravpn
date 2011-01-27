@@ -13,6 +13,7 @@ my %fields = (
   _client_ip_stop   => undef,
   _out_addr         => undef,
   _auth_mode        => undef,
+  _mtu              => undef,
   _auth_local       => [],
   _auth_radius      => [],
   _auth_radius_keys => [],
@@ -49,6 +50,7 @@ sub setup {
   $self->{_client_ip_start} = $config->returnValue('client-ip-pool start');
   $self->{_client_ip_stop} = $config->returnValue('client-ip-pool stop');
   $self->{_auth_mode} = $config->returnValue('authentication mode');
+  $self->{_mtu} = $config->returnValue('mtu');
 
   my @users = $config->listNodes('authentication local-users username');
   foreach my $user (@users) {
@@ -111,16 +113,17 @@ sub setupOrig {
   $self->{_client_ip_start} = $config->returnOrigValue('client-ip-pool start');
   $self->{_client_ip_stop} = $config->returnOrigValue('client-ip-pool stop');
   $self->{_auth_mode} = $config->returnOrigValue('authentication mode');
+  $self->{_mtu} = $config->returnOrigValue('mtu');
 
   my @users = $config->listOrigNodes('authentication local-users username');
   foreach my $user (@users) {
     my $plvl = "authentication local-users username $user password";
-    my $pass = $config->returnValue("$plvl");
+    my $pass = $config->returnOrigValue("$plvl");
     my $dlvl = "authentication local-users username $user disable";
     my $disable = 'enable';
     $disable = 'disable' if $config->existsOrig("$dlvl");
     my $ilvl = "authentication local-users username $user static-ip";
-    my $ip = $config->returnValue("$ilvl");
+    my $ip = $config->returnOrigValue("$ilvl");
     $self->{_auth_local} = [ @{$self->{_auth_local}}, $user, $pass, $disable, $ip ];
   }
   
@@ -175,6 +178,7 @@ sub isDifferentFrom {
   return 1 if ($this->{_client_ip_start} ne $that->{_client_ip_start});
   return 1 if ($this->{_client_ip_stop} ne $that->{_client_ip_stop});
   return 1 if ($this->{_auth_mode} ne $that->{_auth_mode});
+  return 1 if ($this->{_mtu} ne $that->{_mtu});
   return 1 if (listsDiff($this->{_auth_local}, $that->{_auth_local}));
   return 1 if (listsDiff($this->{_auth_radius}, $that->{_auth_radius}));
   return 1 if (listsDiff($this->{_auth_radius_keys},
@@ -192,6 +196,7 @@ sub needsRestart {
   return 1 if ($this->{_out_addr} ne $that->{_out_addr});
   return 1 if ($this->{_client_ip_start} ne $that->{_client_ip_start});
   return 1 if ($this->{_client_ip_stop} ne $that->{_client_ip_stop});
+  return 1 if ($this->{_mtu} ne $that->{_mtu});
   
   return 0;
 }
@@ -268,8 +273,12 @@ nobsdcomp
 novj
 novjccomp
 nologfd
-${rstr}$cfg_delim_end
 EOS
+  if (defined ($self->{_mtu})){
+    $str .= "mtu $self->{_mtu}\n"
+         .  "mru $self->{_mtu}\n";
+  }
+  $str .= "${rstr}$cfg_delim_end\n";
   return ($str, undef);
 }
 
@@ -373,7 +382,7 @@ $cfg_delim_begin
 option $ppp_opts
 ${listen}debug
 noipparam
-logwtmp
+#logwtmp
 localip 10.255.254.0
 remoteip $ip_str
 $cfg_delim_end

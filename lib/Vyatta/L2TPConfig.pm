@@ -27,6 +27,8 @@ my %fields = (
   _client_ip_start  => undef,
   _client_ip_stop   => undef,
   _auth_mode        => undef,
+  _mtu              => undef,
+  _ike_lifetime     => undef,
   _auth_local       => [],
   _auth_radius      => [],
   _auth_radius_keys => [],
@@ -60,6 +62,7 @@ sub setup {
   }
 
   $self->{_mode} = $config->returnValue('ipsec-settings authentication mode');
+  $self->{_ike_lifetime} = $config->returnValue('ipsec-settings ike-lifetime');
   $self->{_psk}
     = $config->returnValue('ipsec-settings authentication pre-shared-secret');
   my $pfx = 'ipsec-settings authentication x509';
@@ -74,6 +77,7 @@ sub setup {
   $self->{_client_ip_start} = $config->returnValue('client-ip-pool start');
   $self->{_client_ip_stop} = $config->returnValue('client-ip-pool stop');
   $self->{_auth_mode} = $config->returnValue('authentication mode');
+  $self->{_mtu} = $config->returnValue('mtu');
 
   my @users = $config->listNodes('authentication local-users username');
   foreach my $user (@users) {
@@ -134,6 +138,8 @@ sub setupOrig {
 
   $self->{_mode} = $config->returnOrigValue(
                             'ipsec-settings authentication mode');
+  $self->{_ike_lifetime} = $config->returnOrigValue(
+                            'ipsec-settings ike-lifetime');
   $self->{_psk} = $config->returnOrigValue(
                             'ipsec-settings authentication pre-shared-secret');
   my $pfx = 'ipsec-settings authentication x509';
@@ -148,6 +154,7 @@ sub setupOrig {
   $self->{_client_ip_start} = $config->returnOrigValue('client-ip-pool start');
   $self->{_client_ip_stop} = $config->returnOrigValue('client-ip-pool stop');
   $self->{_auth_mode} = $config->returnOrigValue('authentication mode');
+  $self->{_mtu} = $config->returnOrigValue('mtu');
 
   my @users = $config->listOrigNodes('authentication local-users username');
   foreach my $user (@users) {
@@ -157,7 +164,7 @@ sub setupOrig {
     my $disable = 'enable';
     $disable = 'disable' if $config->existsOrig("$dlvl");
     my $ilvl = "authentication local-users username $user static-ip";
-    my $ip = $config->returnValue("$ilvl");
+    my $ip = $config->returnOrigValue("$ilvl");
     $self->{_auth_local} = [ @{$self->{_auth_local}}, $user, $pass, $disable, $ip ];
   }
 
@@ -217,6 +224,7 @@ sub isDifferentFrom {
 
   return 1 if ($this->{_is_empty} ne $that->{_is_empty});
   return 1 if ($this->{_mode} ne $that->{_mode});
+  return 1 if ($this->{_ike_lifetime} ne $that->{_ike_lifetime});
   return 1 if ($this->{_psk} ne $that->{_psk});
   return 1 if ($this->{_x509_cacert} ne $that->{_x509_cacert});
   return 1 if ($this->{_x509_crl} ne $that->{_x509_crl});
@@ -228,6 +236,7 @@ sub isDifferentFrom {
   return 1 if ($this->{_client_ip_start} ne $that->{_client_ip_start});
   return 1 if ($this->{_client_ip_stop} ne $that->{_client_ip_stop});
   return 1 if ($this->{_auth_mode} ne $that->{_auth_mode});
+  return 1 if ($this->{_mtu} ne $that->{_mtu});
   return 1 if (listsDiff($this->{_auth_local}, $that->{_auth_local}));
   return 1 if (listsDiff($this->{_auth_radius}, $that->{_auth_radius}));
   return 1 if (listsDiff($this->{_auth_radius_keys},
@@ -244,6 +253,7 @@ sub needsRestart {
 
   return 1 if ($this->{_is_empty} ne $that->{_is_empty});
   return 1 if ($this->{_mode} ne $that->{_mode});
+  return 1 if ($this->{_ike_lifetime} ne $that->{_ike_lifetime});
   return 1 if ($this->{_psk} ne $that->{_psk});
   return 1 if ($this->{_x509_cacert} ne $that->{_x509_cacert});
   return 1 if ($this->{_x509_crl} ne $that->{_x509_crl});
@@ -254,6 +264,7 @@ sub needsRestart {
   return 1 if ($this->{_out_nexthop} ne $that->{_out_nexthop});
   return 1 if ($this->{_client_ip_start} ne $that->{_client_ip_start});
   return 1 if ($this->{_client_ip_stop} ne $that->{_client_ip_stop});
+  return 1 if ($this->{_mtu} ne $that->{_mtu});
   return 1 if (globalIPsecChanged());
   
   return 0;
@@ -380,14 +391,18 @@ ${auth_str}  pfs=no
   rightsubnet=vhost:%no,%priv
   auto=add
   ike=aes256-sha1,3des-sha1!
-  ikelifetime=3600s
   dpddelay=15
   dpdtimeout=45
   dpdaction=clear
   esp=aes256-sha1,3des-sha1!
   rekey=no
-$cfg_delim_end
 EOS
+  if (defined($self->{_ike_lifetime})){
+    $str .= "  ikelifetime=$self->{_ike_lifetime}\n";
+  } else {
+    $str .= "  ikelifetime=3600s\n";
+  }
+  $str .= "$cfg_delim_end\n";
   return ($str, undef);
 }
 
@@ -452,15 +467,17 @@ ${sstr}noccp
 auth
 crtscts
 idle 1800
-mtu 1400
-mru 1400
 nodefaultroute
 debug
 lock
 proxyarp
 connect-delay 5000
-${rstr}$cfg_delim_end
 EOS
+  if (defined ($self->{_mtu})){
+    $str .= "mtu $self->{_mtu}\n"
+         .  "mru $self->{_mtu}\n";
+  }
+  $str .= "${rstr}$cfg_delim_end\n";
   return ($str, undef);
 }
 

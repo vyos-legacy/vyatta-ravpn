@@ -1,4 +1,4 @@
-help: Terminate specified user's current remote access VPN session(s)
+help: Terminate a remote access VPN interface
 allowed: local -a a1;
          a1=( /opt/vyatta/etc/ravpn/sessions/*@pptp* /opt/vyatta/etc/ravpn/sessions/*@l2tp* );
          local -a a2;

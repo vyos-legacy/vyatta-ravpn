@@ -20,4 +20,4 @@ for old_file in "${old_files[@]}"; do
 done
 
 echo -n "$PID" >"${SESSION_PATH}/${USER}@${IFACE}"
-
+echo "User: ${USER} (${IPREMOTE})" >  /sys/class/net/${IFACE}/ifalias

@@ -1,3 +1,10 @@
+vyatta-ravpn (0.12.22) unstable; urgency=low
+
+  * Fix bug 4079: added ability to clear a specific interface; included
+    some node.def files i forgot to commit for bugs 5313, and 5547
+
+ -- John Southworth <john.southworth@vyatta.com>  Thu, 03 Feb 2011 13:20:26 -0600
+
 vyatta-ravpn (0.12.21) unstable; urgency=low
 
   * Added the remote username and IP address as the remote access

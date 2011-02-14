@@ -369,6 +369,7 @@ sub get_ra_conn {
   authby=rsasig
   leftrsasigkey=%cert
   rightrsasigkey=%cert
+  rightca=%same
   leftcert=$server_cert
 EOS
   }

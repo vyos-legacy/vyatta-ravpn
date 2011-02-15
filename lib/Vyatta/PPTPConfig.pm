@@ -12,6 +12,7 @@ my %fields = (
   _client_ip_start  => undef,
   _client_ip_stop   => undef,
   _out_addr         => undef,
+  _dhcp_iface       => undef,
   _auth_mode        => undef,
   _mtu              => undef,
   _auth_local       => [],
@@ -47,6 +48,7 @@ sub setup {
   }
 
   $self->{_out_addr} = $config->returnValue('outside-address');
+  $self->{_dhcp_iface} = $config->returnValue('dhcp-interface');
   $self->{_client_ip_start} = $config->returnValue('client-ip-pool start');
   $self->{_client_ip_stop} = $config->returnValue('client-ip-pool stop');
   $self->{_auth_mode} = $config->returnValue('authentication mode');
@@ -110,6 +112,7 @@ sub setupOrig {
   }
 
   $self->{_out_addr} = $config->returnOrigValue('outside-address');
+  $self->{_dhcp_iface} = $config->returnOrigValue('dhcp-interface');
   $self->{_client_ip_start} = $config->returnOrigValue('client-ip-pool start');
   $self->{_client_ip_stop} = $config->returnOrigValue('client-ip-pool stop');
   $self->{_auth_mode} = $config->returnOrigValue('authentication mode');
@@ -175,6 +178,7 @@ sub isDifferentFrom {
 
   return 1 if ($this->{_is_empty} ne $that->{_is_empty});
   return 1 if ($this->{_out_addr} ne $that->{_out_addr});
+  return 1 if ($this->{_dhcp_iface} ne $that->{_dhcp_iface});
   return 1 if ($this->{_client_ip_start} ne $that->{_client_ip_start});
   return 1 if ($this->{_client_ip_stop} ne $that->{_client_ip_stop});
   return 1 if ($this->{_auth_mode} ne $that->{_auth_mode});
@@ -194,6 +198,7 @@ sub needsRestart {
 
   return 1 if ($this->{_is_empty} ne $that->{_is_empty});
   return 1 if ($this->{_out_addr} ne $that->{_out_addr});
+  return 1 if ($this->{_dhcp_iface} ne $that->{_dhcp_iface});
   return 1 if ($this->{_client_ip_start} ne $that->{_client_ip_start});
   return 1 if ($this->{_client_ip_stop} ne $that->{_client_ip_stop});
   return 1 if ($this->{_mtu} ne $that->{_mtu});
@@ -376,6 +381,10 @@ sub get_pptp_conf {
   if (defined($self->{_out_addr})) {
     $listen = "listen $self->{_out_addr}\n";
   }
+  if (defined($self->{_dhcp_iface})){
+    my $ifaceip = `ip a list dev $self->{_dhcp_iface} | grep 'inet ' | awk 'BEGIN { FS = "/" };{ print \$1 }' | awk '{ print \$2 }'`;
+    $listen = "listen $ifaceip" if ($ifaceip ne "");
+  }
   
   my $str =<<EOS;
 $cfg_delim_begin
@@ -388,6 +397,22 @@ remoteip $ip_str
 $cfg_delim_end
 EOS
   return ($str, undef);
+}
+
+sub get_dhcp_conf {
+  my ($self, $dhcp_conf) = @_;
+  return ("", undef) if (!defined($self->{_dhcp_iface}));
+  if (defined($self->{_dhcp_iface}) && defined($self->{_out_addr})){
+   return (undef, "Only one of dhcp-interface and outside-address can be defined."); 
+  }
+  my $str =<<EOS;
+#!/bin/sh
+$cfg_delim_begin
+/opt/vyatta/bin/sudo-users/vyatta-pptp-dhcp.pl \$interface \$new_ip_address \$old_ip_address
+$cfg_delim_end
+EOS
+  return ($str, undef);
+
 }
 
 sub removeCfg {

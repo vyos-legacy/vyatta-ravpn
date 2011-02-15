@@ -9,6 +9,7 @@ sbin_SCRIPTS += scripts/vyatta-update-pptp.pl
 sbin_SCRIPTS += scripts/vyatta-show-ravpn.pl
 
 bin_sudo_users_SCRIPTS = scripts/vyatta-kick-ravpn.pl
+bin_sudo_users_SCRIPTS += scripts/vyatta-pptp-dhcp.pl
 
 share_perl5_DATA = lib/Vyatta/L2TPConfig.pm
 share_perl5_DATA += lib/Vyatta/PPTPConfig.pm

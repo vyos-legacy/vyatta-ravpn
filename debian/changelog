@@ -1,3 +1,10 @@
+vyatta-ravpn (0.12.26) unstable; urgency=low
+
+  * Force PPTPd to only start when an ip address is available on the
+    configured dhcp interface
+
+ -- John Southworth <john.southworth@vyatta.com>  Tue, 15 Feb 2011 15:53:36 -0600
+
 vyatta-ravpn (0.12.25) unstable; urgency=low
 
   * Bugfix 4950. Added the ability to define a dhcp interface to listen

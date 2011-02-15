@@ -1,3 +1,11 @@
+vyatta-ravpn (0.12.25) unstable; urgency=low
+
+  * Bugfix 4950. Added the ability to define a dhcp interface to listen
+    on. Installs a hook into dhclient to update pptpd.conf and restart
+    the daemon when the address on the configured interface changes.
+
+ -- John Southworth <john.southworth@vyatta.com>  Tue, 15 Feb 2011 14:21:59 -0600
+
 vyatta-ravpn (0.12.24) unstable; urgency=low
 
   * Bugfix 5246

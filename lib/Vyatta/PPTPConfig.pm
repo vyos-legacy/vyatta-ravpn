@@ -383,7 +383,8 @@ sub get_pptp_conf {
   }
   if (defined($self->{_dhcp_iface})){
     my $ifaceip = `ip a list dev $self->{_dhcp_iface} | grep 'inet ' | awk 'BEGIN { FS = "/" };{ print \$1 }' | awk '{ print \$2 }'`;
-    $listen = "listen $ifaceip" if ($ifaceip ne "");
+    $ifaceip = chomp($ifaceip) if ($ifaceip ne "");
+    $listen = "listen $ifaceip\n";
   }
   
   my $str =<<EOS;

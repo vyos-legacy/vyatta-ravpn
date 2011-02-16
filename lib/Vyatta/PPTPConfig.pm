@@ -383,8 +383,8 @@ sub get_pptp_conf {
   }
   if (defined($self->{_dhcp_iface})){
     my $ifaceip = `ip a list dev $self->{_dhcp_iface} | grep 'inet ' | awk 'BEGIN { FS = "/" };{ print \$1 }' | awk '{ print \$2 }'`;
-    $ifaceip = chomp($ifaceip) if ($ifaceip ne "");
-    $listen = "listen $ifaceip\n";
+    chomp($ifaceip) if ($ifaceip ne "");
+    $listen = "listen $ifaceip\n" ;
   }
   
   my $str =<<EOS;
@@ -409,7 +409,8 @@ sub get_dhcp_conf {
   my $str =<<EOS;
 #!/bin/sh
 $cfg_delim_begin
-/opt/vyatta/bin/sudo-users/vyatta-pptp-dhcp.pl \$interface \$new_ip_address \$old_ip_address
+CFGIFACE=$self->{_dhcp_iface}
+/opt/vyatta/bin/sudo-users/vyatta-pptp-dhcp.pl --config_iface=\"\$CFGIFACE\" --interface=\"\$interface\" --new_ip=\"\$new_ip_address\" --reason=\"\$reason\" --old_ip=\"\$old_ip_address\"
 $cfg_delim_end
 EOS
   return ($str, undef);

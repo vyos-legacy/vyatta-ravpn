@@ -1,3 +1,9 @@
+vyatta-ravpn (0.12.28) unstable; urgency=low
+
+  * Added Placeholder for pptp dhclient hook
+
+ -- John Southworth <john.southworth@vyatta.com>  Thu, 17 Feb 2011 11:58:14 -0600
+
 vyatta-ravpn (0.12.27) unstable; urgency=low
 
   * Force PPTPd to only start when an ip address is available on the

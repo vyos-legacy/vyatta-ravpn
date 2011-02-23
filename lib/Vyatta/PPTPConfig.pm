@@ -3,6 +3,7 @@ package Vyatta::PPTPConfig;
 use strict;
 use lib "/opt/vyatta/share/perl5";
 use Vyatta::Config;
+use Vyatta::Misc;
 use NetAddr::IP;
 
 my $cfg_delim_begin = '### Vyatta PPTP VPN Begin ###';
@@ -382,8 +383,12 @@ sub get_pptp_conf {
     $listen = "listen $self->{_out_addr}\n";
   }
   if (defined($self->{_dhcp_iface})){
-    my $ifaceip = `ip a list dev $self->{_dhcp_iface} | grep 'inet ' | awk 'BEGIN { FS = "/" };{ print \$1 }' | awk '{ print \$2 }'`;
-    chomp($ifaceip) if ($ifaceip ne "");
+    return  (undef, "The specified interface is not configured for DHCP")
+      if (!Vyatta::Misc::is_dhcp_enabled($self->{_dhcp_iface},0));
+    my @dhcp_addr = Vyatta::Misc::getIP($self->{_dhcp_iface},4);
+    my $ifaceip = pop(@dhcp_addr);
+    @dhcp_addr = split(/\//, $ifaceip); 
+    $ifaceip = $dhcp_addr[0];
     $listen = "listen $ifaceip\n" ;
   }
   

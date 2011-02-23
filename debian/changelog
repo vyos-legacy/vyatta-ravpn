@@ -1,3 +1,11 @@
+vyatta-ravpn (0.12.29) unstable; urgency=low
+
+  * Add bond interfaces to available dhcp interfaces in tab completion
+  * Make sure only interfaces with dhcp enabled are allowed as a dhcp-
+    interface
+
+ -- John Southworth <john.southworth@vyatta.com>  Tue, 22 Feb 2011 19:58:20 -0600
+
 vyatta-ravpn (0.12.28) unstable; urgency=low
 
   * Added Placeholder for pptp dhclient hook

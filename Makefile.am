@@ -10,6 +10,7 @@ sbin_SCRIPTS += scripts/vyatta-show-ravpn.pl
 
 bin_sudo_users_SCRIPTS = scripts/vyatta-kick-ravpn.pl
 bin_sudo_users_SCRIPTS += scripts/vyatta-pptp-dhcp.pl
+bin_sudo_users_SCRIPTS += scripts/vyatta-l2tp-dhcp.pl
 
 share_perl5_DATA = lib/Vyatta/L2TPConfig.pm
 share_perl5_DATA += lib/Vyatta/PPTPConfig.pm
@@ -35,4 +36,5 @@ install-exec-hook:
 	cp scripts/rename-pptp $(DESTDIR)/etc/ppp/ip-pre-up.d/0005rename-pptp
 	chmod 755 $(DESTDIR)/etc/ppp/ip-pre-up.d/0005rename-pptp
 	cp scripts/pptpd-dhclient-hook $(DESTDIR)/etc/dhcp3/dhclient-exit-hooks.d/pptpd
+	cp scripts/l2tp-dhclient-hook $(DESTDIR)/etc/dhcp3/dhclient-exit-hooks.d/l2tpd
 

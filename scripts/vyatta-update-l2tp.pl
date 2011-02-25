@@ -18,6 +18,7 @@ my $FILE_L2TP_OPTS = '/etc/xl2tpd/xl2tpd.conf';
 my $IPSEC_CTL_FILE = '/var/run/pluto.ctl';
 my $FILE_RADIUS_CONF = '/etc/radiusclient-ng/radiusclient-l2tp.conf';
 my $FILE_RADIUS_KEYS = '/etc/radiusclient-ng/servers-l2tp';
+my $FILE_DHCP_HOOK = '/etc/dhcp3/dhclient-exit-hooks.d/l2tpd';
 
 my $gconfig = new Vyatta::Config;
 my $config = new Vyatta::L2TPConfig;
@@ -47,9 +48,9 @@ my $nat_traversal = $gconfig->returnValue('vpn ipsec nat-traversal');
 ## nat-networks
 my @nat_nets = $gconfig->listNodes('vpn ipsec nat-networks allowed-network');
 
-my ($ipsec_secrets, $ra_conn, $chap_secrets, $ppp_opts, $l2tp_conf,
+my ($dhcp_hook, $ipsec_secrets, $ra_conn, $chap_secrets, $ppp_opts, $l2tp_conf,
     $radius_conf, $radius_keys, $err)
-  = (undef, undef, undef, undef, undef, undef, undef, undef);
+  = (undef, undef, undef, undef, undef, undef, undef, undef, undef);
 while (1) {
   if ((scalar @ipsec_ifs) <= 0) {
     $err = '"vpn ipsec ipsec-interfaces" must be specified';
@@ -63,6 +64,8 @@ while (1) {
     $err = '"vpn ipsec nat-networks" must be specified';
     last;
   }
+  ($dhcp_hook, $err) = $config->get_dhcp_hook();
+  last if (defined($err));
   ($ipsec_secrets, $err) = $config->get_ipsec_secrets();
   last if (defined($err));
   ($ra_conn, $err) = $config->get_ra_conn($RACONN_NAME);
@@ -84,7 +87,7 @@ if (defined($err)) {
   print STDERR "L2TP VPN configuration error: $err.\n";
   exit 1;
 }
-
+exit 1 if (!$config->removeCfg($FILE_DHCP_HOOK));
 exit 1 if (!$config->removeCfg($FILE_IPSEC_CFG));
 exit 1 if (!$config->removeCfg($FILE_IPSEC_SECRETS));
 exit 1 if (!$config->removeCfg($FILE_IPSEC_RACONN));
@@ -95,6 +98,7 @@ exit 1 if (!$config->removeCfg($FILE_RADIUS_CONF));
 exit 1 if (!$config->removeCfg($FILE_RADIUS_KEYS));
 
 my $ipsec_cfg = "include $FILE_IPSEC_RACONN";
+exit 1 if (!$config->writeCfg($FILE_DHCP_HOOK, $dhcp_hook, 0, 0));
 exit 1 if (!$config->writeCfg($FILE_IPSEC_CFG, $ipsec_cfg, 1, 1));
 exit 1 if (!$config->writeCfg($FILE_IPSEC_SECRETS, $ipsec_secrets, 1, 0));
 exit 1 if (!$config->writeCfg($FILE_IPSEC_RACONN, $ra_conn, 0, 0));

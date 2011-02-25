@@ -23,6 +23,7 @@ my %fields = (
   _x509_s_key       => undef,
   _x509_s_pass      => undef,
   _out_addr         => undef,
+  _dhcp_if          => undef,
   _out_nexthop      => undef,
   _client_ip_start  => undef,
   _client_ip_stop   => undef,
@@ -60,7 +61,7 @@ sub setup {
   } else {
     $self->{_is_empty} = 0;
   }
-
+  $self->{_dhcp_if} = $config->returnValue('dhcp-interface');
   $self->{_mode} = $config->returnValue('ipsec-settings authentication mode');
   $self->{_ike_lifetime} = $config->returnValue('ipsec-settings ike-lifetime');
   $self->{_psk}
@@ -135,7 +136,7 @@ sub setupOrig {
   } else {
     $self->{_is_empty} = 0;
   }
-
+  $self->{_dhcp_if} = $config->returnOrigValue('dhcp-interface');
   $self->{_mode} = $config->returnOrigValue(
                             'ipsec-settings authentication mode');
   $self->{_ike_lifetime} = $config->returnOrigValue(
@@ -232,6 +233,7 @@ sub isDifferentFrom {
   return 1 if ($this->{_x509_s_key} ne $that->{_x509_s_key});
   return 1 if ($this->{_x509_s_pass} ne $that->{_x509_s_pass});
   return 1 if ($this->{_out_addr} ne $that->{_out_addr});
+  return 1 if ($this->{_dhcp_if} ne $that->{_dhcp_if});
   return 1 if ($this->{_out_nexthop} ne $that->{_out_nexthop});
   return 1 if ($this->{_client_ip_start} ne $that->{_client_ip_start});
   return 1 if ($this->{_client_ip_stop} ne $that->{_client_ip_stop});
@@ -261,6 +263,7 @@ sub needsRestart {
   return 1 if ($this->{_x509_s_key} ne $that->{_x509_s_key});
   return 1 if ($this->{_x509_s_pass} ne $that->{_x509_s_pass});
   return 1 if ($this->{_out_addr} ne $that->{_out_addr});
+  return 1 if ($this->{_dhcp_if} ne $that->{_dhcp_if});
   return 1 if ($this->{_out_nexthop} ne $that->{_out_nexthop});
   return 1 if ($this->{_client_ip_start} ne $that->{_client_ip_start});
   return 1 if ($this->{_client_ip_stop} ne $that->{_client_ip_stop});
@@ -326,13 +329,19 @@ sub get_ipsec_secrets {
     # PSK
     my $key = $self->{_psk};
     my $oaddr = $self->{_out_addr};
+    if (defined($self->{_dhcp_if})){
+      return  (undef, "The specified interface is not configured for DHCP")
+        if (!Vyatta::Misc::is_dhcp_enabled($self->{_dhcp_if},0));
+      my $dhcpif = $self->{_dhcp_if};
+      $oaddr = get_dhcp_addr($dhcpif);
+    }
     return (undef, "IPsec pre-shared secret not defined") if (!defined($key));
     return (undef, "Outside address not defined") if (!defined($oaddr));
-    my $str =<<EOS;
-$cfg_delim_begin
-$oaddr %any : PSK "$key"
-$cfg_delim_end
-EOS
+    my $str = "$cfg_delim_begin\n";
+    $str .= "$oaddr %any : PSK \"$key\"";
+    $str .= " \#dhcp-ra-interface=$self->{_dhcp_if}\#" if (defined($self->{_dhcp_if}));
+    $str .= "\n";
+    $str .= "$cfg_delim_end\n";
     return ($str, undef);
   } else {
     # X509
@@ -350,13 +359,26 @@ EOS
     return ($str, undef);
   }
 }
+sub get_dhcp_addr{
+  my ($if) = @_;
+  my @dhcp_addr = Vyatta::Misc::getIP($if, 4);
+  my $ifaceip = shift(@dhcp_addr); 
+  @dhcp_addr = split(/\//, $ifaceip); 
+  $ifaceip = $dhcp_addr[0];
+  return ' ' if (!defined($ifaceip));
+  return $ifaceip;
+}
 
 sub get_ra_conn {
   my ($self, $name) = @_;
   my $oaddr = $self->{_out_addr};
+  if (defined($self->{_dhcp_if})){
+    return  (undef, "The specified interface is not configured for DHCP")
+      if (!Vyatta::Misc::is_dhcp_enabled($self->{_dhcp_if},0));
+    my $dhcpif = $self->{_dhcp_if};
+    $oaddr = get_dhcp_addr($dhcpif);
+  }
   return (undef, "Outside address not defined") if (!defined($oaddr));
-  my $onh = $self->{_out_nexthop};
-  return (undef, "Outside nexthop not defined") if (!defined($onh));
   my $auth_str = "  authby=secret\n";
   return (undef, "IPsec authentication mode not defined")
     if (!defined($self->{_mode}));
@@ -387,7 +409,6 @@ conn $name
 ${auth_str}  pfs=no
   left=$oaddr
   leftprotoport=17/1701
-  leftnexthop=$onh
   right=%any
   rightsubnet=vhost:%no,%priv
   auto=add
@@ -542,6 +563,12 @@ sub get_radius_keys {
 sub get_l2tp_conf {
   my ($self, $ppp_opts) = @_;
   my $oaddr = $self->{_out_addr};
+  if (defined($self->{_dhcp_if})){
+    return  (undef, "The specified interface is not configured for DHCP")
+      if (!Vyatta::Misc::is_dhcp_enabled($self->{_dhcp_if},0));
+    my $dhcpif = $self->{_dhcp_if};
+    $oaddr = get_dhcp_addr($dhcpif);
+  }
   return (undef, 'Outside address not defined') if (!defined($oaddr));
   my $cstart = $self->{_client_ip_start};
   return (undef, 'Client IP pool start not defined') if (!defined($cstart));
@@ -579,6 +606,23 @@ length bit = yes
 EOS
   return ($str, undef);
 }
+sub get_dhcp_hook {
+  my ($self, $dhcp_hook) = @_;
+  return ("", undef) if (!defined($self->{_dhcp_if}));
+  if (defined($self->{_dhcp_if}) && defined($self->{_out_addr})){
+   return (undef, "Only one of dhcp-interface and outside-address can be defined.");
+  }
+  my $str =<<EOS;
+#!/bin/sh
+$cfg_delim_begin
+CFGIFACE=$self->{_dhcp_if}
+/opt/vyatta/bin/sudo-users/vyatta-l2tp-dhcp.pl --config_iface=\"\$CFGIFACE\" --interface=\"\$interface\" --new_ip=\"\$new_ip_address\" --reason=\"\$reason\" --old_ip=\"\$old_ip_address\"
+$cfg_delim_end
+EOS
+  return ($str, undef);
+
+}
+
 
 sub removeCfg {
   my ($self, $file) = @_;

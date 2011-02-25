@@ -1,3 +1,9 @@
+vyatta-ravpn (0.12.30) unstable; urgency=low
+
+  * Add dhcp-interfaces to l2tp
+
+ -- John Southworth <john.southworth@vyatta.com>  Fri, 25 Feb 2011 15:40:45 -0600
+
 vyatta-ravpn (0.12.29) unstable; urgency=low
 
   * Add bond interfaces to available dhcp interfaces in tab completion

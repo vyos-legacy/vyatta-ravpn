@@ -379,6 +379,10 @@ sub get_ra_conn {
     $oaddr = get_dhcp_addr($dhcpif);
   }
   return (undef, "Outside address not defined") if (!defined($oaddr));
+  my $onh = $self->{_out_nexthop};
+  return (undef, "outside-nexthop cannot be defined with dhcp-interface") 
+    if (defined($onh) && defined($self->{_dhcp_if}));
+  my $onhstr = (defined($onh) ? "  leftnexthop=$onh\n" : "");
   my $auth_str = "  authby=secret\n";
   return (undef, "IPsec authentication mode not defined")
     if (!defined($self->{_mode}));
@@ -408,7 +412,7 @@ conn $name-mac-zzz
 conn $name
 ${auth_str}  pfs=no
   left=$oaddr
-  leftprotoport=17/1701
+${onhstr}  leftprotoport=17/1701
   right=%any
   rightsubnet=vhost:%no,%priv
   auto=add

@@ -1,0 +1,2 @@
+help: Nexthop IP address for reaching the VPN clients
+type: ipv4

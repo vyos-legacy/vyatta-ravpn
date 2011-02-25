@@ -1,3 +1,10 @@
+vyatta-ravpn (0.12.31) unstable; urgency=low
+
+  * Adding outside-nexthop back. Its probably safer to leave outside-
+    nexthop as an optional parameter instead of a required one
+
+ -- John Southworth <john.southworth@vyatta.com>  Fri, 25 Feb 2011 17:32:23 -0600
+
 vyatta-ravpn (0.12.30) unstable; urgency=low
 
   * Add dhcp-interfaces to l2tp

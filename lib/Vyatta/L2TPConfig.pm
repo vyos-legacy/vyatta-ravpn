@@ -659,6 +659,7 @@ EOM
 
 sub maybeClustering {
   my ($self, $config, @interfaces) = @_;
+  return 0 if (defined($self->{_dhcp_if}));
   return (!(Vyatta::Misc::isIPinInterfaces($config, $self->{_out_addr},
                                          @interfaces)));
 }

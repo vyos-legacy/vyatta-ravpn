@@ -1,3 +1,11 @@
+vyatta-ravpn (0.12.32) unstable; urgency=low
+
+  * If a dhcp-interface is set then we are not clustering. This is
+    needed since outside-address is undefined when dhcp-interface is
+    defined, making the old check not work anymore.
+
+ -- John Southworth <john.southworth@vyatta.com>  Fri, 25 Feb 2011 18:48:51 -0600
+
 vyatta-ravpn (0.12.31) unstable; urgency=low
 
   * Adding outside-nexthop back. Its probably safer to leave outside-

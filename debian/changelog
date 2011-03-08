@@ -1,3 +1,10 @@
+vyatta-ravpn (0.12.33) unstable; urgency=low
+
+  * Fixed problems found by perlcritic
+  * Clear dhclient hooks when configuration is deleted
+
+ -- John Southworth <john.southworth@vyatta.com>  Tue, 08 Mar 2011 16:44:10 -0600
+
 vyatta-ravpn (0.12.32) unstable; urgency=low
 
   * If a dhcp-interface is set then we are not clustering. This is

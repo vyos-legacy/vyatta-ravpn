@@ -35,9 +35,9 @@ foreach my $ses (@sessions) {
 
 sub read_stat {
   my $file = shift;
-  open(IF, "<$file") or return 'N/A';
-  my $stat = <IF>;
-  close(IF);
+  open(my $IF, "<", "$file") or return 'N/A';
+  my $stat = <$IF>;
+  close($IF);
   return 'N/A' if (!defined($stat));
   chomp($stat);
   if ($stat > 1000000000) {
@@ -61,13 +61,13 @@ foreach my $intf (keys %if_hash) {
   my $proto = 'N/A';
   my ($local, $remote) = ('N/A', 'N/A');
 
-  open(IP_ADDR, "ip addr show $intf |") or next;
-  while (<IP_ADDR>) {
+  open(my $IP_ADDR, "-|", "ip addr show $intf") or next;
+  while (<$IP_ADDR>) {
     next if (!/\s*inet/);
     /inet ([\d.]+) peer ([\d.]+)\/32 /;
     ($local, $remote) = ($1, $2);
   }
-  close(IP_ADDR);
+  close($IP_ADDR);
 
   if ($local eq $L2TP_LOCAL) {
     $proto = 'L2TP';

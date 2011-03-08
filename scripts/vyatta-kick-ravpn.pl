@@ -30,9 +30,9 @@ foreach my $ses (@sessions) {
   my ($u, $intf) = ($1, $2);
   if (defined $clearif){
     if ($intf eq $username) {
-      open(SFILE, "$SESSION_PATH/$ses") or next;
-      my $pid = <SFILE>;
-      close(SFILE);
+      open(my $SFILE, '<', "$SESSION_PATH/$ses") or next;
+      my $pid = <$SFILE>;
+      close($SFILE);
       chomp($pid);
       next if (!($pid =~ /^\d+$/));
       push @pids, $pid;
@@ -40,9 +40,9 @@ foreach my $ses (@sessions) {
   }
   else {
     if ($u eq $username) {
-      open(SFILE, "$SESSION_PATH/$ses") or next;
-      my $pid = <SFILE>;
-      close(SFILE);
+      open(my $SFILE, '<', "$SESSION_PATH/$ses") or next;
+      my $pid = <$SFILE>;
+      close($SFILE);
       chomp($pid);
       next if (!($pid =~ /^\d+$/));
       push @pids, $pid;

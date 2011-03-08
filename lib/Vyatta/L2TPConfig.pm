@@ -284,7 +284,7 @@ sub setupX509IfNecessary {
     if (!defined($self->{_mode}));
   my $mode = $self->{_mode};
   if ($mode eq 'pre-shared-secret') {
-    return undef;
+    return;
   }
 
   return "\"ca-cert-file\" must be defined for X.509\n"
@@ -317,7 +317,7 @@ sub setupX509IfNecessary {
   system("cp -f $self->{_x509_s_key} $SERVER_KEY_PATH/");
   return "Cannot copy $self->{_x509_s_key}" if ($? >> 8);
 
-  return undef;
+  return;
 }
 
 sub get_ipsec_secrets {
@@ -643,7 +643,8 @@ EOM
 sub writeCfg {
   my ($self, $file, $cfg, $append, $delim) = @_;
   my $op = ($append) ? '>>' : '>';
-  if (!open(WR, "$op$file")) {
+  my $WR = undef;
+  if (!open($WR, "$op","$file")) {
     print STDERR <<EOM;
 L2TP VPN configuration error: Cannot write config to $file.
 EOM
@@ -652,8 +653,8 @@ EOM
   if ($delim) {
     $cfg = "$cfg_delim_begin\n" . $cfg . "\n$cfg_delim_end\n";
   }
-  print WR "$cfg";
-  close WR;
+  print ${WR} "$cfg";
+  close $WR;
   return 1;
 }
 

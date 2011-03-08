@@ -26,9 +26,9 @@ if ($str =~ /listen/){
   $str =~ s/$cfg_del_end/listen $nip\n$cfg_del_end/g;
 }
 # write new pptp config
-open (FD, '>', "/etc/pptpd.conf");
-print FD $str;
-close FD;
+open (my $FD, '>', "/etc/pptpd.conf");
+print ${FD} $str;
+close $FD;
 # restart the daemon
 system("kill -TERM `pgrep -f 'pppd.* /etc/ppp/options\\.pptpd'` "
        . '>&/dev/null');

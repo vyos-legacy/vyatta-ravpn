@@ -437,7 +437,8 @@ EOM
 sub writeCfg {
   my ($self, $file, $cfg, $append, $delim) = @_;
   my $op = ($append) ? '>>' : '>';
-  if (!open(WR, "$op$file")) {
+  my $WR = undef;
+  if (!open($WR, $op, "$file")) {
     print STDERR <<EOM;
 PPTP VPN configuration error: Cannot write config to $file.
 EOM
@@ -446,8 +447,8 @@ EOM
   if ($delim) {
     $cfg = "$cfg_delim_begin\n" . $cfg . "\n$cfg_delim_end\n";
   }
-  print WR "$cfg";
-  close WR;
+  print ${WR} "$cfg";
+  close $WR;
   return 1;
 }
 

@@ -25,6 +25,7 @@ if (!($config->isDifferentFrom($oconfig))) {
 if ($config->isEmpty()) {
   if (!$oconfig->isEmpty()) {
     # deleted => stop
+    system("echo '' > $FILE_DHCP_SCRIPT");
     system("kill -TERM `pgrep -f 'pppd.* /etc/ppp/options\\.pptpd'` "
            . '>&/dev/null');
     system("$PPTP_INIT stop");

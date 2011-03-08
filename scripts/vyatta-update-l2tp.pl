@@ -29,6 +29,8 @@ $oconfig->setupOrig();
 if ($config->isEmpty()) {
   if (!$oconfig->isEmpty()) {
     # deleted
+    # clear the dhclient hook
+    system("echo '' > $FILE_DHCP_HOOK");
     # kill existing PPP sessions
     system("kill -TERM `pgrep -f 'name VyattaL2TPServer'` >&/dev/null");
     # stop L2TP server

@@ -1,3 +1,9 @@
+vyatta-ravpn (0.12.34) unstable; urgency=low
+
+  * * Add help and checks for IPsec L2TP auth nodes to push
+
+ -- Mohit Mehta <mohit@vyatta.com>  Wed, 13 Apr 2011 18:12:55 -0700
+
 vyatta-ravpn (0.12.33) unstable; urgency=low
 
   * Fixed problems found by perlcritic

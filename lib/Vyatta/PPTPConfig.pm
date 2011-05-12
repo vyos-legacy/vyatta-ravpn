@@ -64,6 +64,7 @@ sub setup {
     $disable = 'disable' if $config->exists("$dlvl");
     my $ilvl = "authentication local-users username $user static-ip";
     my $ip = $config->returnValue("$ilvl");
+    $ip = 'none' if (!defined($ip));
     $self->{_auth_local} = [ @{$self->{_auth_local}}, $user, $pass, $disable, $ip ];
   }
   
@@ -128,6 +129,7 @@ sub setupOrig {
     $disable = 'disable' if $config->existsOrig("$dlvl");
     my $ilvl = "authentication local-users username $user static-ip";
     my $ip = $config->returnOrigValue("$ilvl");
+    $ip = 'none' if (!defined($ip));
     $self->{_auth_local} = [ @{$self->{_auth_local}}, $user, $pass, $disable, $ip ];
   }
   
@@ -231,7 +233,7 @@ sub get_chap_secrets {
                   " \"$user\" 2> /dev/null";
         system ("$cmd");
       } else {
-        if ($ip eq '') {
+        if ($ip eq 'none') {
             $str .= ("\n$user\t" . 'pptpd' . "\t\"$pass\"\t" . '*');
         }
         else {

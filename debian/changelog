@@ -1,3 +1,10 @@
+vyatta-ravpn (0.12.35) unstable; urgency=low
+
+  * Bugfix 7073: Use a placeholder for empty ip so that listDiff will
+    work properly
+
+ -- John Southworth <john.southworth@vyatta.com>  Thu, 12 May 2011 13:40:01 -0500
+
 vyatta-ravpn (0.12.34) unstable; urgency=low
 
   * * Add help and checks for IPsec L2TP auth nodes to push

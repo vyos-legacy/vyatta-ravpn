@@ -1,3 +1,10 @@
+vyatta-ravpn (0.12.36) unstable; urgency=low
+
+  * Bugfix 7145: Comment out secrets line of non-active dhcp-interface
+    l2tp
+
+ -- John Southworth <john.southworth@vyatta.com>  Wed, 08 Jun 2011 17:32:35 -0500
+
 vyatta-ravpn (0.12.35) unstable; urgency=low
 
   * Bugfix 7073: Use a placeholder for empty ip so that listDiff will

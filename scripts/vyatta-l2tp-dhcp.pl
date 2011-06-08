@@ -65,6 +65,7 @@ foreach my $line (@lines){
   if (($line =~ /(.*)\#dhcp-ra-interface=(.*)\#/) && ($2 eq $iface)){
     my $secretline = $1;
     $secretline =~ /(.*?) (.*?) : PSK (.*)/;
+    $nip = "#" if ($nip eq '');
     $line = "$nip $2 : PSK $3\#dhcp-ra-interface=$iface\#\n";
   }
   print ${output_secrets} $line;

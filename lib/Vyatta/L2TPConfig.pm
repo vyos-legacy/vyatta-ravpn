@@ -340,6 +340,7 @@ sub get_ipsec_secrets {
     return (undef, "IPsec pre-shared secret not defined") if (!defined($key));
     return (undef, "Outside address not defined") if (!defined($oaddr));
     my $str = "$cfg_delim_begin\n";
+    $oaddr = "#" if ($oaddr eq '');
     $str .= "$oaddr %any : PSK \"$key\"";
     $str .= " \#dhcp-ra-interface=$self->{_dhcp_if}\#" if (defined($self->{_dhcp_if}));
     $str .= "\n";

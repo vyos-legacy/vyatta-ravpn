@@ -230,7 +230,7 @@ sub get_chap_secrets {
       my $ip = shift @users;
       if ($disable eq 'disable') {
         my $cmd = "/opt/vyatta/bin/sudo-users/vyatta-kick-ravpn.pl" .
-                  " \"$user\" 2> /dev/null";
+                  " --username=\"$user\" --protocol=\"pptp\"  2> /dev/null";
         system ("$cmd");
       } else {
         if ($ip eq 'none') {

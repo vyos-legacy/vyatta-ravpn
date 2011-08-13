@@ -1,11 +1,24 @@
 #!/usr/bin/perl
 
 use strict;
+use Getopt::Long;
 
-my $username = shift;
-my $clearif  = shift;
+my $username = undef;
+my $interface  = undef;
+my $protocol = undef;
 
 my $SESSION_PATH = '/opt/vyatta/etc/ravpn/sessions';
+
+GetOptions(
+  "username=s" => \$username,
+  "interface=s" => \$interface,
+  "protocol=s" => \$protocol
+);
+
+if ( (defined $username) && (defined $interface) ) {
+  print STDERR "Please specify either interface or user name\n";
+  exit 1;
+}
 
 if (!opendir(SDIR, "$SESSION_PATH")) {
   print STDERR "Cannot get session information\n";
@@ -28,8 +41,8 @@ my @pids = ();
 foreach my $ses (@sessions) {
   $ses =~ /^(.+)\@([^@]+)$/;
   my ($u, $intf) = ($1, $2);
-  if (defined $clearif){
-    if ($intf eq $username) {
+  if (defined $interface){
+    if ($intf eq $interface) {
       open(my $SFILE, '<', "$SESSION_PATH/$ses") or next;
       my $pid = <$SFILE>;
       close($SFILE);
@@ -40,6 +53,11 @@ foreach my $ses (@sessions) {
   }
   else {
     if ($u eq $username) {
+      if (defined $protocol) {
+        if ( $intf !~ /^$protocol\d+/ ) {
+          last;
+        }
+      }
       open(my $SFILE, '<', "$SESSION_PATH/$ses") or next;
       my $pid = <$SFILE>;
       close($SFILE);

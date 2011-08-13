@@ -4,4 +4,4 @@ allowed: local -a a1;
          local -a a2;
          a2=( "${a1[@]%@*}" );
          echo -n ${a2[@]##*/};
-run: sudo ${vyatta_bindir}/sudo-users/vyatta-kick-ravpn.pl "$5"
+run: sudo ${vyatta_bindir}/sudo-users/vyatta-kick-ravpn.pl --username="$5"

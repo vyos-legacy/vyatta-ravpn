@@ -119,12 +119,14 @@ EOM
 }
 
 # wait for ipsec to settle
-my $sleep = 0;
-while (! -e $IPSEC_CTL_FILE) {
-  sleep 1;
-  if (++$sleep > 10) {
-    print STDERR "L2TP VPN configuration error: IPsec did not start.\n";
-    exit 1;
+if (!($config->maybeClustering($gconfig, @ipsec_ifs))) {
+  my $sleep = 0;
+  while (! -e $IPSEC_CTL_FILE) {
+    sleep 1;
+    if (++$sleep > 10) {
+      print STDERR "L2TP VPN configuration error: IPsec did not start.\n";
+      exit 1;
+    }
   }
 }
 

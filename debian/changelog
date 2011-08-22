@@ -1,3 +1,19 @@
+vyatta-ravpn (0.12.38) unstable; urgency=low
+
+  [ Daniil Baturin ]
+  * Bug 7426: Add "protocol" option to "clear vpn remote-access user"
+    templates, change backend calls to match new syntax.
+  * Bug 7426: Add option to clear user sessions with specific protocol,
+    improve CLI arguments syntax.
+  * Bug 7426: Make commands to terminate user sessions if a user has
+    been disabled protocol specific.
+
+  [ John Southworth ]
+  * Bugfix 7440: check to see if we are clustering before failing b/c
+    ipsec hasn't started
+
+ -- John Southworth <john.southworth@vyatta.com>  Mon, 22 Aug 2011 12:19:26 -0500
+
 vyatta-ravpn (0.12.37) unstable; urgency=low
 
   * new branch

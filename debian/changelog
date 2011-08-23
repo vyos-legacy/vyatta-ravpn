@@ -1,3 +1,10 @@
+vyatta-ravpn (0.12.36+napa2) unstable; urgency=low
+
+  * Bugfix 7440: check to see if we are clustering before failing b/c
+    ipsec hasn't started
+
+ -- John Southworth <john.southworth@vyatta.com>  Mon, 22 Aug 2011 19:12:30 -0500
+
 vyatta-ravpn (0.12.36+napa1) unstable; urgency=low
 
   * new branch

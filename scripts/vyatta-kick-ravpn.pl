@@ -52,7 +52,7 @@ foreach my $ses (@sessions) {
     }
   }
   else {
-    if ($u eq $username) {
+    if ($u eq $username or $u eq "all_users") {
       if (defined $protocol) {
         if ( $intf !~ /^$protocol\d+/ ) {
           last;

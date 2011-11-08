@@ -1,3 +1,9 @@
+vyatta-ravpn (0.12.40) unstable; urgency=low
+
+  * Bugfix 7620: Fix reset all for pptp and l2tp
+
+ -- John Southworth <john.southworth@vyatta.com>  Tue, 08 Nov 2011 13:52:45 -0600
+
 vyatta-ravpn (0.12.39) unstable; urgency=low
 
   * Move 'clear vpn remote-access' top 'reset vpn remote-access'

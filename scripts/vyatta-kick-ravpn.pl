@@ -52,10 +52,10 @@ foreach my $ses (@sessions) {
     }
   }
   else {
-    if ($u eq $username or $u eq "all_users") {
+    if ($u eq $username or $username eq "all_users") {
       if (defined $protocol) {
         if ( $intf !~ /^$protocol\d+/ ) {
-          last;
+          next;
         }
       }
       open(my $SFILE, '<', "$SESSION_PATH/$ses") or next;

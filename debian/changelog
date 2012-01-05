@@ -1,3 +1,9 @@
+vyatta-ravpn (0.12.41) unstable; urgency=low
+
+  * Bugfix 7705: sort ifindices numerically
+
+ -- John Southworth <john.southworth@vyatta.com>  Thu, 05 Jan 2012 08:48:40 -0800
+
 vyatta-ravpn (0.12.40) unstable; urgency=low
 
   * Bugfix 7620: Fix reset all for pptp and l2tp

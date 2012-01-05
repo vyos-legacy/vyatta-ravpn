@@ -16,7 +16,7 @@ IFPREFIX=$6
 
 # We have to get a list of currently used indicies since these 
 # are dynamic interfaces
-IFINDICIES=$(ip a | grep '.*: pptp' | awk {' print $2 '} | sed -e s/://g -e s/pptp//g | sort)
+IFINDICIES=$(ip a | grep '.*: pptp' | awk {' print $2 '} | sed -e s/://g -e s/pptp//g | sort -n)
 
 # The ppp daemon executes this script for all ppp interfaces, even those
 # unrelated to pptp.  We want to change the names only of

@@ -53,8 +53,8 @@ sub read_stat {
 print <<EOH;
 Active remote access VPN sessions:
 
-User       Time      Proto Iface Remote IP       TX pkt/byte   RX pkt/byte
----------- --------- ----- ----- --------------- ------ ------ ------ ------
+User            Proto Iface     Tunnel IP       TX byte RX byte  Time 
+----            ----- -----     ---------       ------- -------  ---- 
 EOH
 foreach my $intf (keys %if_hash) {
   my $user = $if_hash{$intf};
@@ -97,8 +97,8 @@ foreach my $intf (keys %if_hash) {
     print "$user\n";
     $user = '';
   }
-  printf "%-10s %-9s %-5s %-5s %-15s %6s %6s %6s %6s\n",
-         $user, $tstr, $proto, $intf, $remote, $tx_p, $tx_b, $rx_p, $rx_b;
+  printf "%-15s %-5s %-9s %-15s %7s %7s  %-s\n",
+         $user, $proto, $intf, $remote, $tx_b, $rx_b, $tstr;
 }
 
 exit 0;

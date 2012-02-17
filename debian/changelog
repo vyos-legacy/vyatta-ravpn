@@ -1,3 +1,10 @@
+vyatta-ravpn (0.12.42) unstable; urgency=low
+
+  * Bugfix 7799: Adjust remote access vpn output so that the information
+    is easier to read
+
+ -- John Southworth <john.southworth@vyatta.com>  Fri, 17 Feb 2012 13:55:23 -0800
+
 vyatta-ravpn (0.12.41) unstable; urgency=low
 
   * Bugfix 7705: sort ifindices numerically

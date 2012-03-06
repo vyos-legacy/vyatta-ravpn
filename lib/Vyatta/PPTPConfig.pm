@@ -59,6 +59,8 @@ sub setup {
   foreach my $user (@users) {
     my $plvl = "authentication local-users username $user password";
     my $pass = $config->returnValue("$plvl");
+    return "Password for user: $user is not defined"
+          if !(defined($pass));
     my $dlvl = "authentication local-users username $user disable";
     my $disable = 'enable';
     $disable = 'disable' if $config->exists("$dlvl");

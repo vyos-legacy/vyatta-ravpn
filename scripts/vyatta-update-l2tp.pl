@@ -23,7 +23,11 @@ my $FILE_DHCP_HOOK = '/etc/dhcp3/dhclient-exit-hooks.d/l2tpd';
 my $gconfig = new Vyatta::Config;
 my $config = new Vyatta::L2TPConfig;
 my $oconfig = new Vyatta::L2TPConfig;
-$config->setup();
+my $err = $config->setup();
+if (defined($err) && $err ne 0) {
+  print STDERR "L2TP VPN configuration error: $err.\n";
+  exit 1;
+}
 $oconfig->setupOrig();
 
 if ($config->isEmpty()) {

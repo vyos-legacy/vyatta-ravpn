@@ -14,7 +14,11 @@ my $FILE_DHCP_SCRIPT = '/etc/dhcp3/dhclient-exit-hooks.d/pptpd';
 
 my $config = new Vyatta::PPTPConfig;
 my $oconfig = new Vyatta::PPTPConfig;
-$config->setup();
+my $err = $config->setup();
+if (defined($err) && $err ne 0) {
+  print STDERR "PPTP VPN configuration error: $err.\n";
+  exit 1;
+}
 $oconfig->setupOrig();
 
 if (!($config->isDifferentFrom($oconfig))) {

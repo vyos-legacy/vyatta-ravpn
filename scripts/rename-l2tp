@@ -12,7 +12,7 @@
 # bounced
 
 OLD_IFNAME=$1
-IFPREFIX=$6
+IFPREFIX=$LINKNAME
 
 # We have to get a list of currently used indicies since these 
 # are dynamic interfaces

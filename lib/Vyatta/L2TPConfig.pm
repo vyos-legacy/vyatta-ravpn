@@ -30,6 +30,7 @@ my %fields = (
   _auth_mode        => undef,
   _mtu              => undef,
   _ike_lifetime     => undef,
+  _auth_require     => undef,
   _auth_local       => [],
   _auth_radius      => [],
   _auth_radius_keys => [],
@@ -78,6 +79,7 @@ sub setup {
   $self->{_client_ip_start} = $config->returnValue('client-ip-pool start');
   $self->{_client_ip_stop} = $config->returnValue('client-ip-pool stop');
   $self->{_auth_mode} = $config->returnValue('authentication mode');
+  $self->{_auth_require} = $config->returnValue('authentication require');
   $self->{_mtu} = $config->returnValue('mtu');
 
   my @users = $config->listNodes('authentication local-users username');
@@ -156,6 +158,7 @@ sub setupOrig {
   $self->{_client_ip_start} = $config->returnOrigValue('client-ip-pool start');
   $self->{_client_ip_stop} = $config->returnOrigValue('client-ip-pool stop');
   $self->{_auth_mode} = $config->returnOrigValue('authentication mode');
+  $self->{_auth_require} = $config->returnValue('authentication require');
   $self->{_mtu} = $config->returnOrigValue('mtu');
 
   my @users = $config->listOrigNodes('authentication local-users username');
@@ -240,6 +243,7 @@ sub isDifferentFrom {
   return 1 if ($this->{_client_ip_start} ne $that->{_client_ip_start});
   return 1 if ($this->{_client_ip_stop} ne $that->{_client_ip_stop});
   return 1 if ($this->{_auth_mode} ne $that->{_auth_mode});
+  return 1 if ($this->{_auth_require} ne $that->{_auth_require});
   return 1 if ($this->{_mtu} ne $that->{_mtu});
   return 1 if (listsDiff($this->{_auth_local}, $that->{_auth_local}));
   return 1 if (listsDiff($this->{_auth_radius}, $that->{_auth_radius}));
@@ -502,6 +506,9 @@ lock
 proxyarp
 connect-delay 5000
 EOS
+  if (defined ($self->{_auth_require})){
+    $str .= "require-".$self->{_auth_require}."\n";
+  }
   if (defined ($self->{_mtu})){
     $str .= "mtu $self->{_mtu}\n"
          .  "mru $self->{_mtu}\n";

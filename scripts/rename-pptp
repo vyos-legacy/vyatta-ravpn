@@ -1,0 +1,54 @@
+#!/bin/bash
+#
+# Script to re-name ppp interface being used by pptp to have
+# a form: pptp<unit>.
+#
+# The name of the current ppp interface is passed in as argument 1.  The full
+# name that we are to change it to is passed in as argument 6.  We don't
+# use the rest of the arguments.
+#
+# We do this before device is brought up so that later scripts
+# can see the correct name, and the interface doesn't have to be
+# bounced
+
+OLD_IFNAME=$1
+IFPREFIX=$6
+
+# We have to get a list of currently used indicies since these 
+# are dynamic interfaces
+IFINDICIES=$(ip a | grep '.*: pptp' | awk {' print $2 '} | sed -e s/://g -e s/pptp//g | sort -n)
+
+# The ppp daemon executes this script for all ppp interfaces, even those
+# unrelated to pptp.  We want to change the names only of
+# interface being used by pptp.
+#
+if [ "$IFPREFIX" != "pptp" ]; then
+    # its not a pptp
+    exit 0;
+fi
+
+# if we got some indicies for connected peers so we loop on them to determine
+#     the next available pptp index. 
+# The loop prevents us from counting up if only one client is connected. 
+# For instance the old way if a there was only one client was connected to 
+#     pptp85 the new client would be issued pptp86 instead this way the new 
+#     client gets pptp0 and the next pptp1, etc.
+if [ -n "$IFINDICIES" ]; then
+	MYINDEX=0
+	for i in $IFINDICIES; do
+	    if [ $MYINDEX = $i ]; then
+		MYINDEX=$(($MYINDEX + 1))
+	    else 
+		break
+	    fi
+	done
+        NEW_IFNAME=$IFPREFIX$MYINDEX
+else
+        MYINDEX=0
+        NEW_IFNAME=$IFPREFIX$MYINDEX
+fi
+
+# Re-name the interface.  Log all errors to syslog.
+logger -p debug -t "vyatta xpptpd"  Re-naming $OLD_IFNAME to $NEW_IFNAME
+ip link set dev $OLD_IFNAME name $NEW_IFNAME | \
+    logger -p debug -t "vyatta xpptpd"

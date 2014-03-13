@@ -1,0 +1,480 @@
+vyatta-ravpn (0.12.44+vyos1+helium1) unstable; urgency=low
+
+  * New branch
+
+ -- Daniil Baturin <daniil@baturin.org>  Sat, 15 Feb 2014 20:25:10 +0100
+
+vyatta-ravpn (0.12.44+hydrogen1) unstable; urgency=low
+
+  * New branch
+
+ -- Daniil Baturin <daniil@baturin.org>  Sun, 17 Nov 2013 01:23:04 +0100
+
+vyatta-ravpn (0.12.44+daisy1) unstable; urgency=low
+
+  * create daisy branch
+
+ -- John Southworth <john.southworth@vyatta.com>  Sat, 13 Oct 2012 13:31:37 -0700
+
+vyatta-ravpn (0.12.44) unstable; urgency=low
+
+  * new branch
+
+ -- John Southworth <john.southworth@vyatta.com>  Fri, 12 Oct 2012 19:48:08 -0700
+
+vyatta-ravpn (0.12.43) unstable; urgency=low
+
+  * new branch
+
+ -- Deepti Kulkarni <deepti@vyatta.com>  Sat, 03 Mar 2012 02:26:31 -0800
+
+vyatta-ravpn (0.12.42) unstable; urgency=low
+
+  * Bugfix 7799: Adjust remote access vpn output so that the information
+    is easier to read
+
+ -- John Southworth <john.southworth@vyatta.com>  Fri, 17 Feb 2012 13:55:23 -0800
+
+vyatta-ravpn (0.12.41) unstable; urgency=low
+
+  * Bugfix 7705: sort ifindices numerically
+
+ -- John Southworth <john.southworth@vyatta.com>  Thu, 05 Jan 2012 08:48:40 -0800
+
+vyatta-ravpn (0.12.40) unstable; urgency=low
+
+  * Bugfix 7620: Fix reset all for pptp and l2tp
+
+ -- John Southworth <john.southworth@vyatta.com>  Tue, 08 Nov 2011 13:52:45 -0600
+
+vyatta-ravpn (0.12.39) unstable; urgency=low
+
+  * Move 'clear vpn remote-access' top 'reset vpn remote-access'
+  * Bugfix 7433: add 'reset vpn remote-access all' functionallity
+
+ -- John Southworth <john.southworth@vyatta.com>  Thu, 27 Oct 2011 17:50:17 -0500
+
+vyatta-ravpn (0.12.38) unstable; urgency=low
+
+  [ Daniil Baturin ]
+  * Bug 7426: Add "protocol" option to "clear vpn remote-access user"
+    templates, change backend calls to match new syntax.
+  * Bug 7426: Add option to clear user sessions with specific protocol,
+    improve CLI arguments syntax.
+  * Bug 7426: Make commands to terminate user sessions if a user has
+    been disabled protocol specific.
+
+  [ John Southworth ]
+  * Bugfix 7440: check to see if we are clustering before failing b/c
+    ipsec hasn't started
+
+ -- John Southworth <john.southworth@vyatta.com>  Mon, 22 Aug 2011 12:19:26 -0500
+
+vyatta-ravpn (0.12.37) unstable; urgency=low
+
+  * new branch
+
+ -- Deepti Kulkarni <deepti@vyatta.com>  Thu, 07 Jul 2011 20:58:54 -0700
+
+vyatta-ravpn (0.12.36) unstable; urgency=low
+
+  * Bugfix 7145: Comment out secrets line of non-active dhcp-interface
+    l2tp
+
+ -- John Southworth <john.southworth@vyatta.com>  Wed, 08 Jun 2011 17:32:35 -0500
+
+vyatta-ravpn (0.12.35) unstable; urgency=low
+
+  * Bugfix 7073: Use a placeholder for empty ip so that listDiff will
+    work properly
+
+ -- John Southworth <john.southworth@vyatta.com>  Thu, 12 May 2011 13:40:01 -0500
+
+vyatta-ravpn (0.12.34) unstable; urgency=low
+
+  * * Add help and checks for IPsec L2TP auth nodes to push
+
+ -- Mohit Mehta <mohit@vyatta.com>  Wed, 13 Apr 2011 18:12:55 -0700
+
+vyatta-ravpn (0.12.33) unstable; urgency=low
+
+  * Fixed problems found by perlcritic
+  * Clear dhclient hooks when configuration is deleted
+
+ -- John Southworth <john.southworth@vyatta.com>  Tue, 08 Mar 2011 16:44:10 -0600
+
+vyatta-ravpn (0.12.32) unstable; urgency=low
+
+  * If a dhcp-interface is set then we are not clustering. This is
+    needed since outside-address is undefined when dhcp-interface is
+    defined, making the old check not work anymore.
+
+ -- John Southworth <john.southworth@vyatta.com>  Fri, 25 Feb 2011 18:48:51 -0600
+
+vyatta-ravpn (0.12.31) unstable; urgency=low
+
+  * Adding outside-nexthop back. Its probably safer to leave outside-
+    nexthop as an optional parameter instead of a required one
+
+ -- John Southworth <john.southworth@vyatta.com>  Fri, 25 Feb 2011 17:32:23 -0600
+
+vyatta-ravpn (0.12.30) unstable; urgency=low
+
+  * Add dhcp-interfaces to l2tp
+
+ -- John Southworth <john.southworth@vyatta.com>  Fri, 25 Feb 2011 15:40:45 -0600
+
+vyatta-ravpn (0.12.29) unstable; urgency=low
+
+  * Add bond interfaces to available dhcp interfaces in tab completion
+  * Make sure only interfaces with dhcp enabled are allowed as a dhcp-
+    interface
+
+ -- John Southworth <john.southworth@vyatta.com>  Tue, 22 Feb 2011 19:58:20 -0600
+
+vyatta-ravpn (0.12.28) unstable; urgency=low
+
+  * Added Placeholder for pptp dhclient hook
+
+ -- John Southworth <john.southworth@vyatta.com>  Thu, 17 Feb 2011 11:58:14 -0600
+
+vyatta-ravpn (0.12.27) unstable; urgency=low
+
+  * Force PPTPd to only start when an ip address is available on the
+    configured dhcp interface, fixed some broken cases
+
+ -- John Southworth <john.southworth@vyatta.com>  Tue, 15 Feb 2011 18:17:42 -0600
+
+vyatta-ravpn (0.12.26) unstable; urgency=low
+
+  * Force PPTPd to only start when an ip address is available on the
+    configured dhcp interface
+
+ -- John Southworth <john.southworth@vyatta.com>  Tue, 15 Feb 2011 15:53:36 -0600
+
+vyatta-ravpn (0.12.25) unstable; urgency=low
+
+  * Bugfix 4950. Added the ability to define a dhcp interface to listen
+    on. Installs a hook into dhclient to update pptpd.conf and restart
+    the daemon when the address on the configured interface changes.
+
+ -- John Southworth <john.southworth@vyatta.com>  Tue, 15 Feb 2011 14:21:59 -0600
+
+vyatta-ravpn (0.12.24) unstable; urgency=low
+
+  * Bugfix 5246
+
+ -- John Southworth <john.southworth@vyatta.com>  Mon, 14 Feb 2011 14:20:48 -0600
+
+vyatta-ravpn (0.12.23) unstable; urgency=low
+
+  * Make help strings correct for 'clear vpn remote-access interface'
+
+ -- John Southworth <john.southworth@vyatta.com>  Thu, 03 Feb 2011 13:23:54 -0600
+
+vyatta-ravpn (0.12.22) unstable; urgency=low
+
+  * Fix bug 4079: added ability to clear a specific interface; included
+    some node.def files i forgot to commit for bugs 5313, and 5547
+
+ -- John Southworth <john.southworth@vyatta.com>  Thu, 03 Feb 2011 13:20:26 -0600
+
+vyatta-ravpn (0.12.21) unstable; urgency=low
+
+  * Added the remote username and IP address as the remote access
+    interface description
+
+ -- John Southworth <john.southworth@vyatta.com>  Wed, 02 Feb 2011 20:27:49 -0600
+
+vyatta-ravpn (0.12.20) unstable; urgency=low
+
+  * Bugfix: 5313 and 5547: Added the ability to define a MTU for pptp
+    and l2tp connections, as well as define an ike lifetime for
+    l2tp/ipsec connections
+
+ -- John Southworth <john.southworth@vyatta.com>  Thu, 27 Jan 2011 14:06:48 -0600
+
+vyatta-ravpn (0.12.19) unstable; urgency=low
+
+  [ John Southworth ]
+  * Changes to rename pptp and l2tp connections to pptpX and l2tpX
+    respectively
+  * Changes to rename pptp and l2tp connections to pptpX and l2tpX
+    respectively
+  * Changes to rename pptp and l2tp connections to pptpX and l2tpX
+    respectively, Perl modules
+  * removing logwtmp is not required so I'm reverting that change, the
+    problem was on my build machine.
+
+  [ Daniil Baturin ]
+  * Added static IP and disable options to PPTPConfig.pm
+  * Added static IP option to L2TPConfig.pm
+  * Added configuration templates for PPTP static IP and disable options
+  * Added configuration templates for L2TP static IP option
+
+  [ John Southworth ]
+
+ -- John Southworth <john.southworth@vyatta.com>  Fri, 21 Jan 2011 13:39:09 -0600
+
+vyatta-ravpn (0.12.18) unstable; urgency=low
+
+  * new branch
+
+ -- An-Cheng Huang <ancheng@vyatta.com>  Tue, 28 Dec 2010 13:51:59 -0800
+
+vyatta-ravpn (0.12.17) unstable; urgency=low
+
+  * remove deprecated linda file
+  * update gitignore
+
+ -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Mon, 29 Nov 2010 09:34:04 -0800
+
+vyatta-ravpn (0.12.16) unstable; urgency=low
+
+  * UNRELEASED
+
+ -- An-Cheng Huang <ancheng@vyatta.com>  Thu, 02 Sep 2010 18:30:38 -0700
+
+vyatta-ravpn (0.12.15) unstable; urgency=low
+
+  * fix for bug 5401
+  * update help text to use val_help
+
+ -- An-Cheng Huang <ancheng@vyatta.com>  Tue, 17 Aug 2010 15:31:35 -0700
+
+vyatta-ravpn (0.12.14) unstable; urgency=low
+
+  * UNRELEASED
+
+ -- An-Cheng Huang <ancheng@vyatta.com>  Thu, 22 Jul 2010 17:25:58 -0700
+
+vyatta-ravpn (0.12.13) unstable; urgency=low
+
+  * remove verb usage from begining of help strings
+
+ -- Mohit Mehta <mohit.mehta@vyatta.com>  Thu, 22 Jul 2010 11:38:50 -0700
+
+vyatta-ravpn (0.12.12) unstable; urgency=low
+
+  * Fix Bug 5544 IPsec phase 1 for L2TP session fails after changing
+    L2TP config
+
+ -- Mohit Mehta <mohit.mehta@vyatta.com>  Mon, 19 Apr 2010 18:48:42 -0700
+
+vyatta-ravpn (0.12.11) unstable; urgency=low
+
+  * Fix Bug 5386 L2TP will work only the first time Vyatta is booted
+
+ -- Mohit Mehta <mohit.mehta@vyatta.com>  Sat, 20 Mar 2010 22:48:44 -0700
+
+vyatta-ravpn (0.12.10) unstable; urgency=low
+
+  * UNRELEASED
+
+ -- An-Cheng Huang <ancheng@vyatta.com>  Wed, 17 Feb 2010 16:16:09 -0800
+
+vyatta-ravpn (0.12.9) unstable; urgency=low
+
+  * Changes to make l2tp/IPSec work with strongswan -
+  * use `ipsec update` to update ipsec connection changes
+
+ -- Mohit Mehta <mohit.mehta@vyatta.com>  Tue, 12 Jan 2010 17:20:45 -0800
+
+vyatta-ravpn (0.12.8) unstable; urgency=low
+
+  * skip used tags
+
+ -- An-Cheng Huang <ancheng@vyatta.com>  Wed, 02 Dec 2009 10:47:34 -0800
+
+vyatta-ravpn (0.12.5) unstable; urgency=low
+
+  [ Sergey ]
+  * fix for bug 5052
+
+ -- An-Cheng Huang <ancheng@vyatta.com>  Mon, 02 Nov 2009 16:12:24 -0800
+
+vyatta-ravpn (0.12.4) unstable; urgency=low
+
+  * add description field for L2TP remote-access vpn settings
+
+ -- Mohit Mehta <mohit.mehta@vyatta.com>  Mon, 24 Aug 2009 15:35:02 -0700
+
+vyatta-ravpn (0.12.3) unstable; urgency=low
+
+  * add support for disabling L2TP remote-access user
+
+ -- Mohit Mehta <mohit.mehta@vyatta.com>  Sun, 23 Aug 2009 20:42:10 -0700
+
+vyatta-ravpn (0.12.2) unstable; urgency=low
+
+  * UNRELEASED
+
+ -- An-Cheng Huang <ancheng@vyatta.com>  Fri, 29 May 2009 18:37:17 -0700
+
+vyatta-ravpn (0.12.1) unstable; urgency=low
+
+  [ An-Cheng Huang ]
+  * add support for development build
+
+  [ Stephen Hemminger ]
+  * Rename VyattaL2TP to Vyatta::L2TP
+  * Convert to Vyatta::
+
+  [ Stig Thormodsrud ]
+  * Convert to use Vyatta::
+  * Convert to Vyatta::
+
+  [ An-Cheng Huang ]
+  * update maintainer information
+  * "files" file should be removed before package build
+
+ -- An-Cheng Huang <ancheng@build-vm.localdomain>  Mon, 15 Dec 2008 15:13:48 -0800
+
+vyatta-ravpn (0.12) unstable; urgency=low
+
+	  3.2.0
+  [ Mark O'Brien ]
+
+
+  [ An-Cheng Huang ]
+  * handle openswan's conn ordering
+  * fix adding/deleting l2tp connections for mac support.
+  * L2TP/PPP authentication no longer requires CHAP
+  * fix for bug 3624: define separate sections for Windows and Mac.
+
+  [ Mark O'Brien ]
+
+ -- Mark O'Brien <mobrien@firebolt.vyatta.com>  Tue, 25 Nov 2008 19:10:53 -0800
+
+vyatta-ravpn (0.11) unstable; urgency=low
+
+	  3.1.2
+  [ Mark O'Brien ]
+
+
+  [ An-Cheng Huang ]
+  * fix for bug 3469: use "%any" for client port
+  * partial fix for bug 3044: add l2tp restart condition.
+
+  [ Mark O'Brien ]
+
+ -- Mark O'Brien <mobrien@firebolt.vyatta.com>  Wed, 23 Jul 2008 21:36:15 -0700
+
+vyatta-ravpn (0.10) unstable; urgency=low
+
+	  3.1.0
+  [ Mark O'Brien ]
+
+
+  [ Stig Thormodsrud ]
+  * Fix 3041: Non-zero exit code returned by "xl2tpd start" when service
+    is
+
+  [ rbalocca ]
+  * Ignore derived files
+  * Convert to our method of changelog creation
+
+  [ Mohit Mehta ]
+  * Fix Bug 3069 Help strings should be standardized
+
+  [ Mark O'Brien ]
+
+ -- Mark O'Brien <mobrien@firebolt.vyatta.com>  Tue, 17 Jun 2008 09:27:31 -0700
+
+vyatta-ravpn (0.9) unstable; urgency=low
+
+  3.0.5
+
+
+ -- Mark O'Brien <mobrien@vyatta.com>  Tue, 06 May 2008 12:43:42 -0700
+
+vyatta-ravpn (0.8) unstable; urgency=low
+
+  3.0.4
+
+
+ -- Mark O'Brien <mobrien@vyatta.com>  Mon, 05 May 2008 16:41:00 -0700
+
+vyatta-ravpn (0.7) unstable; urgency=low
+
+  3.0.3
+
+
+ -- Mark O'Brien <mobrien@vyatta.com>  Tue, 29 Apr 2008 16:42:47 -0700
+
+vyatta-ravpn (0.6) unstable; urgency=low
+
+  VC4.0.2
+
+
+ -- Mark O'Brien <mobrien@vyatta.com>  Sat, 19 Apr 2008 11:56:29 -0700
+
+vyatta-ravpn (0.5) unstable; urgency=low
+
+  VC4.0.2
+
+
+ -- Mark O'Brien <mobrien@vyatta.com>  Wed, 16 Apr 2008 09:50:30 -0700
+
+vyatta-ravpn (0.4) unstable; urgency=low
+
+  3.0.2
+  [ Mark O'Brien ]
+
+
+  [ An-Cheng Huang ]
+  * allow L2TP VPN to work with clustering
+  * fix for bug 3072: correct error message
+
+  [ Mark O'Brien ]
+  * 3.0.1
+
+  [ rbalocca ]
+  * Fix debian dependencies
+  * Set dependencies on either bash or vyatta-bash
+
+  [ Mark O'Brien ]
+
+ -- Mark O'Brien <mobrien@vyatta.com>  Fri, 04 Apr 2008 18:01:19 -0700
+
+vyatta-ravpn (0.3) unstable; urgency=low
+
+  VC4.0.1
+  [ Mark O'Brien ]
+
+
+  [ An-Cheng Huang ]
+  * show command doesn't need sudo
+  * fix for bug 2961: add more specific error messages.
+  * fix for bug 3005: op commands now handle user names with '@'.
+  * fix for bug 3013: ensure IPsec authentication mode is set.
+
+  [ Stephen Hemminger ]
+  * Replace VPL with GPLv2
+  * update from VPL1 to GPLv2
+
+  [ Mark O'Brien ]
+
+ -- Mark O'Brien <mobrien@vyatta.com>  Tue, 18 Mar 2008 19:05:14 -0700
+
+vyatta-ravpn (0.2) unstable; urgency=low
+
+  vc4.0.0
+  [ Mark O'Brien ]
+
+
+  [ An-Cheng Huang ]
+  * convert templates to new syntax
+  * fix for bug 2699: rename op command
+  * fix clear command for operator level
+
+  [ Mark O'Brien ]
+
+ -- Mark O'Brien <mobrien@vyatta.com>  Mon, 25 Feb 2008 17:39:56 -0800
+
+vyatta-ravpn (0.1) unstable; urgency=low
+
+  * Initial Release.
+
+ -- An-Cheng Huang <ancheng@vyatta.com>  Fri, 28 Dec 2007 13:49:53 -0700
+

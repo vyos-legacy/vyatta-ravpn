@@ -1,0 +1,21 @@
+Source: vyatta-ravpn
+Section: contrib/net
+Priority: extra
+Maintainer: Vyatta Package Maintainers <maintainers@vyatta.com>
+Build-Depends: debhelper (>= 5), autotools-dev
+Standards-Version: 3.7.2
+
+Package: vyatta-ravpn
+Architecture: all
+Depends: perl,
+ vyatta-cfg,
+ vyatta-op,
+ vyatta-cfg-vpn,
+ vyatta-op-vpn,
+ vyatta-bash | bash (>= 3.1),
+ ppp,
+ xl2tpd,
+ pptpd,
+ libradiusclient-ng2
+Description: Vyatta remote access VPN configuration/operational commands
+ Vyatta configuration/operational templates and scripts for remote access VPN

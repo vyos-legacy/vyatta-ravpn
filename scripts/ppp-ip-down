@@ -1,0 +1,16 @@
+#!/bin/bash
+
+PATH=/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin
+export PATH
+
+SESSION_PATH=/opt/vyatta/etc/ravpn/sessions
+IFACE="$1"
+USER="$PEERNAME"
+
+# only track ravpn sessions
+if [ "$IPLOCAL" != "10.255.255.0" ] && [ "$IPLOCAL" != "10.255.254.0" ]; then
+  exit 0
+fi
+
+rm -f "${SESSION_PATH}/${USER}@${IFACE}"
+

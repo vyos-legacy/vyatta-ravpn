@@ -1,0 +1,23 @@
+#!/bin/bash
+
+PATH=/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin
+export PATH
+
+SESSION_PATH=/opt/vyatta/etc/ravpn/sessions
+IFACE="$1"
+USER="$PEERNAME"
+PID="$PPPD_PID"
+
+# only track ravpn sessions
+if [ "$IPLOCAL" != "10.255.255.0" ] && [ "$IPLOCAL" != "10.255.254.0" ]; then
+  exit 0
+fi
+
+# delete "old" files, if any
+declare -a old_files=($(ls ${SESSION_PATH}/*@${IFACE} 2>/dev/null))
+for old_file in "${old_files[@]}"; do
+  rm -f $old_file
+done
+
+echo -n "$PID" >"${SESSION_PATH}/${USER}@${IFACE}"
+echo "User: ${USER} (${IPREMOTE})" >  /sys/class/net/${IFACE}/ifalias

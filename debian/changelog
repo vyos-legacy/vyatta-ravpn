@@ -1,3 +1,13 @@
+vyatta-ravpn (0.12.44+vyos1+helium2) unstable; urgency=low
+
+  [ Antonio Cunyat Alario ]
+  * Changes ipparam by linkname ppp variable to rename interfaces. Bug-
+    Id 146
+
+  [ Daniil Baturin ]
+
+ -- Daniil Baturin <daniil@baturin.org>  Fri, 14 Mar 2014 09:29:25 +0100
+
 vyatta-ravpn (0.12.44+vyos1+helium1) unstable; urgency=low
 
   * New branch

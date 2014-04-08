@@ -281,6 +281,7 @@ nobsdcomp
 novj
 novjccomp
 nologfd
+require-mppe-128
 EOS
   if (defined ($self->{_auth_require})){
     $str .= "require-".$self->{_auth_require}."\n";

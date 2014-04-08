@@ -274,6 +274,7 @@ EOS
 $cfg_delim_begin
 name pptpd
 linkname pptp
+require-mppe-128
 ${sstr}debug
 proxyarp
 lock
@@ -281,7 +282,6 @@ nobsdcomp
 novj
 novjccomp
 nologfd
-require-mppe-128
 EOS
   if (defined ($self->{_auth_require})){
     $str .= "require-".$self->{_auth_require}."\n";

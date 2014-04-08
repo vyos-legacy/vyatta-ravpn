@@ -15,6 +15,7 @@ my %fields = (
   _out_addr         => undef,
   _dhcp_iface       => undef,
   _auth_mode        => undef,
+  _auth_require     => undef,
   _mtu              => undef,
   _auth_local       => [],
   _auth_radius      => [],
@@ -53,6 +54,8 @@ sub setup {
   $self->{_client_ip_start} = $config->returnValue('client-ip-pool start');
   $self->{_client_ip_stop} = $config->returnValue('client-ip-pool stop');
   $self->{_auth_mode} = $config->returnValue('authentication mode');
+  $self->{_auth_require} = $config->returnValue('authentication require');
+
   $self->{_mtu} = $config->returnValue('mtu');
 
   my @users = $config->listNodes('authentication local-users username');
@@ -118,6 +121,7 @@ sub setupOrig {
   $self->{_client_ip_start} = $config->returnOrigValue('client-ip-pool start');
   $self->{_client_ip_stop} = $config->returnOrigValue('client-ip-pool stop');
   $self->{_auth_mode} = $config->returnOrigValue('authentication mode');
+  $self->{_auth_require} = $config->returnOrigValue('authentication require');
   $self->{_mtu} = $config->returnOrigValue('mtu');
 
   my @users = $config->listOrigNodes('authentication local-users username');
@@ -185,6 +189,7 @@ sub isDifferentFrom {
   return 1 if ($this->{_client_ip_start} ne $that->{_client_ip_start});
   return 1 if ($this->{_client_ip_stop} ne $that->{_client_ip_stop});
   return 1 if ($this->{_auth_mode} ne $that->{_auth_mode});
+  return 1 if ($this->{_auth_require} ne $that->{_auth_require});
   return 1 if ($this->{_mtu} ne $that->{_mtu});
   return 1 if (listsDiff($this->{_auth_local}, $that->{_auth_local}));
   return 1 if (listsDiff($this->{_auth_radius}, $that->{_auth_radius}));
@@ -269,10 +274,6 @@ EOS
 $cfg_delim_begin
 name pptpd
 linkname pptp
-refuse-pap
-refuse-chap
-refuse-mschap
-require-mschap-v2
 require-mppe-128
 ${sstr}debug
 proxyarp
@@ -282,6 +283,18 @@ novj
 novjccomp
 nologfd
 EOS
+  if (defined ($self->{_auth_require})){
+    $str .= "require-".$self->{_auth_require}."\n";
+  }
+else 
+ {
+ my $str =<<EOS;
+refuse-pap
+refuse-chap
+refuse-mschap
+require-mschap-v2
+EOS
+ }
   if (defined ($self->{_mtu})){
     $str .= "mtu $self->{_mtu}\n"
          .  "mru $self->{_mtu}\n";
@@ -459,6 +472,7 @@ sub print_str {
   $str .= "\n  cip_start " . $self->{_client_ip_start};
   $str .= "\n  cip_stop " . $self->{_client_ip_stop};
   $str .= "\n  auth_mode " . $self->{_auth_mode};
+  $str .= "\n  auth_require" . $self->{_auth_require};
   $str .= "\n  auth_local " . (join ",", @{$self->{_auth_local}});
   $str .= "\n  auth_radius " . (join ",", @{$self->{_auth_radius}});
   $str .= "\n  auth_radius_s " . (join ",", @{$self->{_auth_radius_keys}});

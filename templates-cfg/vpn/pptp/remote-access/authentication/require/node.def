@@ -1,5 +1,5 @@
 type: txt
-help: Authentication protocol for remote access peer L2TP VPN
+help: Authentication protocol for remote access peer PPTP VPN
 syntax:expression: $VAR(@) in "pap", "chap", "mschap", "mschap-v2"; "Authentication protocol must be \"pap\", \"chap\", \"mschap\" or \"mschap-v2\"(default)"
 val_help: pap;Require the peer to authenticate itself using PAP [Password Authentication Protocol]. 
 val_help: chap;Require the peer to authenticate itself using CHAP [Challenge Handshake Authentication Protocol]. 

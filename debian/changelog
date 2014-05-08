@@ -1,3 +1,13 @@
+vyatta-ravpn (0.12.44+hydrogen2) unstable; urgency=low
+
+  [ Antonio Cunyat Alario ]
+  * Changes ipparam by linkname ppp variable to rename interfaces. Bug-
+    Id 146
+
+  [ Daniil Baturin ]
+
+ -- Daniil Baturin <daniil@baturin.org>  Fri, 09 May 2014 00:02:50 +0200
+
 vyatta-ravpn (0.12.44+hydrogen1) unstable; urgency=low
 
   * New branch

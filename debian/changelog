@@ -1,3 +1,16 @@
+vyatta-ravpn (0.12.44+vyos1+helium4) unstable; urgency=low
+
+  [ Antonio Cunyat Alario ]
+  * pptp enable authentication require options
+  * pptp enable authentication require options
+  * pptp enable authentication require options
+  * pptp enable authentication require options
+
+  [ Daniil Baturin ]
+  * Bug #13: Fix variable scope that screwed up auth config generation.
+
+ -- Daniil Baturin <daniil@baturin.org>  Mon, 04 Aug 2014 10:03:51 +0000
+
 vyatta-ravpn (0.12.44+vyos1+helium3) unstable; urgency=low
 
   [ Antonio Cunyat Alario ]

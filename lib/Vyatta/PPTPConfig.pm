@@ -286,15 +286,15 @@ EOS
   if (defined ($self->{_auth_require})){
     $str .= "require-".$self->{_auth_require}."\n";
   }
-else 
- {
- my $str =<<EOS;
+  else 
+  {
+    $str =<<EOS;
 refuse-pap
 refuse-chap
 refuse-mschap
 require-mschap-v2
 EOS
- }
+  }
   if (defined ($self->{_mtu})){
     $str .= "mtu $self->{_mtu}\n"
          .  "mru $self->{_mtu}\n";

@@ -1,3 +1,9 @@
+vyatta-ravpn (0.12.44+vyos1+helium5) unstable; urgency=low
+
+  * Update maintainer address.
+
+ -- Daniil Baturin <daniil@baturin.org>  Tue, 14 Oct 2014 22:32:54 +0200
+
 vyatta-ravpn (0.12.44+vyos1+helium4) unstable; urgency=low
 
   [ Antonio Cunyat Alario ]

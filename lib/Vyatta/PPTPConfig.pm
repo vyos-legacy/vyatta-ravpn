@@ -288,7 +288,7 @@ EOS
   }
   else 
   {
-    $str =<<EOS;
+    $str .= <<EOS;
 refuse-pap
 refuse-chap
 refuse-mschap

@@ -1,3 +1,9 @@
+vyatta-ravpn (0.12.44+vyos1+helium6) unstable; urgency=low
+
+  * Bug #354: fix options.pptpd generation.
+
+ -- Daniil Baturin <daniil@baturin.org>  Thu, 16 Oct 2014 09:59:59 +0200
+
 vyatta-ravpn (0.12.44+vyos1+helium5) unstable; urgency=low
 
   * Update maintainer address.

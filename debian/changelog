@@ -1,3 +1,15 @@
+vyatta-ravpn (0.12.45+vyos2+lithium2) lithium; urgency=low
+
+  * New branch
+
+ -- Daniil Baturin <dmbaturin@squeeze32devel.multi.eu>  Fri, 21 Nov 2014 20:01:39 +0100
+
+vyatta-ravpn (0.12.45+vyos2+lithium1) lithium; urgency=low
+
+  * new branch
+
+ -- Daniil Baturin <daniil@baturin.org>  Fri, 21 Nov 2014 20:01:01 +0100
+
 vyatta-ravpn (0.12.44+vyos1+helium6) unstable; urgency=low
 
   * Bug #354: fix options.pptpd generation.

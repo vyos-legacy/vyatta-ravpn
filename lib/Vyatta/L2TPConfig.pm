@@ -29,7 +29,9 @@ my %fields = (
   _client_ip_stop   => undef,
   _auth_mode        => undef,
   _mtu              => undef,
+  _idle             => undef,
   _ike_lifetime     => undef,
+  _esplifetime      => undef,
   _auth_require     => undef,
   _auth_local       => [],
   _auth_radius      => [],
@@ -65,6 +67,7 @@ sub setup {
   $self->{_dhcp_if} = $config->returnValue('dhcp-interface');
   $self->{_mode} = $config->returnValue('ipsec-settings authentication mode');
   $self->{_ike_lifetime} = $config->returnValue('ipsec-settings ike-lifetime');
+  $self->{_esplifetime} = $config->returnValue('ipsec-settings lifetime');
   $self->{_psk}
     = $config->returnValue('ipsec-settings authentication pre-shared-secret');
   my $pfx = 'ipsec-settings authentication x509';
@@ -81,6 +84,7 @@ sub setup {
   $self->{_auth_mode} = $config->returnValue('authentication mode');
   $self->{_auth_require} = $config->returnValue('authentication require');
   $self->{_mtu} = $config->returnValue('mtu');
+  $self->{_idle} = $config->returnValue('idle');
 
   my @users = $config->listNodes('authentication local-users username');
   foreach my $user (@users) {
@@ -114,7 +118,7 @@ sub setup {
   if (defined($tmp)) {
     $self->{_dns} = [ @{$self->{_dns}}, $tmp ];
   }
-  
+
   $tmp = $config->returnValue('wins-servers server-1');
   if (defined($tmp)) {
     $self->{_wins} = [ @{$self->{_wins}}, $tmp ];
@@ -144,6 +148,8 @@ sub setupOrig {
                             'ipsec-settings authentication mode');
   $self->{_ike_lifetime} = $config->returnOrigValue(
                             'ipsec-settings ike-lifetime');
+  $self->{_esplifetime} = $config->returnOrigValue(
+                            'ipsec-settings lifetime');
   $self->{_psk} = $config->returnOrigValue(
                             'ipsec-settings authentication pre-shared-secret');
   my $pfx = 'ipsec-settings authentication x509';
@@ -160,6 +166,7 @@ sub setupOrig {
   $self->{_auth_mode} = $config->returnOrigValue('authentication mode');
   $self->{_auth_require} = $config->returnValue('authentication require');
   $self->{_mtu} = $config->returnOrigValue('mtu');
+  $self->{_idle} = $config->returnOrigValue('idle');
 
   my @users = $config->listOrigNodes('authentication local-users username');
   foreach my $user (@users) {
@@ -193,7 +200,7 @@ sub setupOrig {
   if (defined($tmp)) {
     $self->{_dns} = [ @{$self->{_dns}}, $tmp ];
   }
-  
+
   $tmp = $config->returnOrigValue('wins-servers server-1');
   if (defined($tmp)) {
     $self->{_wins} = [ @{$self->{_wins}}, $tmp ];
@@ -231,6 +238,7 @@ sub isDifferentFrom {
   return 1 if ($this->{_is_empty} ne $that->{_is_empty});
   return 1 if ($this->{_mode} ne $that->{_mode});
   return 1 if ($this->{_ike_lifetime} ne $that->{_ike_lifetime});
+  return 1 if ($this->{_esplifetime} ne $that->{_esplifetime});
   return 1 if ($this->{_psk} ne $that->{_psk});
   return 1 if ($this->{_x509_cacert} ne $that->{_x509_cacert});
   return 1 if ($this->{_x509_crl} ne $that->{_x509_crl});
@@ -245,6 +253,7 @@ sub isDifferentFrom {
   return 1 if ($this->{_auth_mode} ne $that->{_auth_mode});
   return 1 if ($this->{_auth_require} ne $that->{_auth_require});
   return 1 if ($this->{_mtu} ne $that->{_mtu});
+  return 1 if ($this->{_idle} ne $that->{_idle});
   return 1 if (listsDiff($this->{_auth_local}, $that->{_auth_local}));
   return 1 if (listsDiff($this->{_auth_radius}, $that->{_auth_radius}));
   return 1 if (listsDiff($this->{_auth_radius_keys},
@@ -252,7 +261,7 @@ sub isDifferentFrom {
   return 1 if (listsDiff($this->{_dns}, $that->{_dns}));
   return 1 if (listsDiff($this->{_wins}, $that->{_wins}));
   return 1 if (globalIPsecChanged());
-  
+
   return 0;
 }
 
@@ -262,6 +271,7 @@ sub needsRestart {
   return 1 if ($this->{_is_empty} ne $that->{_is_empty});
   return 1 if ($this->{_mode} ne $that->{_mode});
   return 1 if ($this->{_ike_lifetime} ne $that->{_ike_lifetime});
+  return 1 if ($this->{_esplifetime} ne $that->{_esplifetime});
   return 1 if ($this->{_psk} ne $that->{_psk});
   return 1 if ($this->{_x509_cacert} ne $that->{_x509_cacert});
   return 1 if ($this->{_x509_crl} ne $that->{_x509_crl});
@@ -274,8 +284,9 @@ sub needsRestart {
   return 1 if ($this->{_client_ip_start} ne $that->{_client_ip_start});
   return 1 if ($this->{_client_ip_stop} ne $that->{_client_ip_stop});
   return 1 if ($this->{_mtu} ne $that->{_mtu});
+  return 1 if ($this->{_idle} ne $that->{_idle});
   return 1 if (globalIPsecChanged());
-  
+
   return 0;
 }
 
@@ -369,8 +380,8 @@ EOS
 sub get_dhcp_addr{
   my ($if) = @_;
   my @dhcp_addr = Vyatta::Misc::getIP($if, 4);
-  my $ifaceip = shift(@dhcp_addr); 
-  @dhcp_addr = split(/\//, $ifaceip); 
+  my $ifaceip = shift(@dhcp_addr);
+  @dhcp_addr = split(/\//, $ifaceip);
   $ifaceip = $dhcp_addr[0];
   return ' ' if (!defined($ifaceip));
   return $ifaceip;
@@ -387,7 +398,7 @@ sub get_ra_conn {
   }
   return (undef, "Outside address not defined") if (!defined($oaddr));
   my $onh = $self->{_out_nexthop};
-  return (undef, "outside-nexthop cannot be defined with dhcp-interface") 
+  return (undef, "outside-nexthop cannot be defined with dhcp-interface")
     if (defined($onh) && defined($self->{_dhcp_if}));
   my $onhstr = (defined($onh) ? "  leftnexthop=$onh\n" : "");
   my $auth_str = "  authby=secret\n";
@@ -435,6 +446,11 @@ EOS
   } else {
     $str .= "  ikelifetime=3600s\n";
   }
+  if (defined($self->{_esplifetime})){
+    $str .= "  keylife=$self->{_esplifetime}\n";
+  } else {
+    $str .= "  keylife=3600s\n";
+  }
   $str .= "$cfg_delim_end\n";
   return ($str, undef);
 }
@@ -454,7 +470,7 @@ sub get_chap_secrets {
       my $disable = shift @users;
       my $ip = shift @users;
       if ($disable eq 'disable') {
-        my $cmd = "/opt/vyatta/bin/sudo-users/vyatta-kick-ravpn.pl" . 
+        my $cmd = "/opt/vyatta/bin/sudo-users/vyatta-kick-ravpn.pl" .
                   " --username=\"$user\" --protocol=\"l2tp\"  2> /dev/null";
         system ("$cmd");
       } else {
@@ -499,7 +515,6 @@ ipcp-accept-remote
 ${sstr}noccp
 auth
 crtscts
-idle 1800
 nodefaultroute
 debug
 lock
@@ -508,6 +523,11 @@ connect-delay 5000
 EOS
   if (defined ($self->{_auth_require})){
     $str .= "require-".$self->{_auth_require}."\n";
+  }
+  if (defined ($self->{_idle})){
+    $str .= "idle $self->{_idle}\n"
+  } else {
+    $str .= "idle 1800\n";
   }
   if (defined ($self->{_mtu})){
     $str .= "mtu $self->{_mtu}\n"
@@ -612,7 +632,7 @@ ip range = $cstart-$cstop
 local ip = 10.255.255.0
 refuse pap = yes
 require authentication = yes
-name = VyattaL2TPServer 
+name = VyattaL2TPServer
 ppp debug = yes
 pppoptfile = $ppp_opts
 length bit = yes

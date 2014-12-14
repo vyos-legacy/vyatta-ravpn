@@ -1,3 +1,9 @@
+vyatta-ravpn (0.12.45+vyos2+lithium3) lithium; urgency=low
+
+  * Force release
+
+ -- Alex Harpin <development@landsofshadow.co.uk>  Sun, 14 Dec 2014 18:28:15 +0000
+ 
 vyatta-ravpn (0.12.45+vyos2+lithium2) lithium; urgency=low
 
   * New branch

@@ -1,2 +1,9 @@
 help: Password for authentication
 type: txt
+
+comp_help:
+Password for authentication
+
+Use of single quotes to set the password is recommended, if you are using
+special characters in the password then single quotes are required.
+Example usage : 'aA1-&!@,.:_2Bb$'

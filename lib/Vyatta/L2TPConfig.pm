@@ -408,26 +408,17 @@ EOS
   }
   my $str =<<EOS;
 $cfg_delim_begin
-conn $name-win-aaa
-  rightprotoport=17/1701
-  also=$name
-
-conn $name-mac-zzz
-  rightprotoport=17/%any
-  also=$name
-
 conn $name
-${auth_str}  pfs=no
+${auth_str}  type=transport
+  keyexchange=ikev1
   left=$oaddr
 ${onhstr}  leftprotoport=17/1701
   right=%any
-  rightsubnet=vhost:%no,%priv
+  rightprotoport=17/%any
   auto=add
-  ike=aes256-sha1,3des-sha1!
   dpddelay=15
   dpdtimeout=45
   dpdaction=clear
-  esp=aes256-sha1,3des-sha1!
   rekey=no
 EOS
   if (defined($self->{_ike_lifetime})){

@@ -1,3 +1,10 @@
+vyatta-ravpn (0.12.44+vyos1+helium7) unstable; urgency=low
+
+  [ Alex Harpin ]
+  * vyatta-ravpn: update l2tp and pptp password help for single quotes
+
+ -- Alex Harpin <development@landsofshadow.co.uk>  Tue, 24 Feb 2015 22:53:06 +0000
+ 
 vyatta-ravpn (0.12.44+vyos1+helium6) unstable; urgency=low
 
   * Bug #354: fix options.pptpd generation.

@@ -17,5 +17,5 @@ Depends: perl,
  xl2tpd,
  pptpd,
  libradiusclient-ng2
-Description: Vyatta remote access VPN configuration/operational commands
- Vyatta configuration/operational templates and scripts for remote access VPN
+Description: VyOS remote access VPN configuration/operational commands
+ VyOS configuration/operational templates and scripts for remote access VPN

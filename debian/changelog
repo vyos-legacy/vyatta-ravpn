@@ -1,3 +1,9 @@
+vyatta-ravpn (0.12.45+vyos2+lithium5) lithium; urgency=low
+
+  * Fix package description.
+
+ -- Daniil Baturin <daniil@baturin.org>  Wed, 25 Mar 2015 16:39:18 +0100
+
 vyatta-ravpn (0.12.45+vyos2+lithium4) lithium; urgency=low
 
   [ Alex Harpin ]

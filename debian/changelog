@@ -1,3 +1,9 @@
+vyatta-ravpn (0.12.45+vyos2+lithium6) lithium; urgency=low
+
+  * vyatta-ravpn: update dh_gencontrol with new development build flag
+
+ -- Alex Harpin <development@landsofshadow.co.uk>  Sat, 20 Jun 2015 07:16:31 +0100
+ 
 vyatta-ravpn (0.12.45+vyos2+lithium5) lithium; urgency=low
 
   * Fix package description.

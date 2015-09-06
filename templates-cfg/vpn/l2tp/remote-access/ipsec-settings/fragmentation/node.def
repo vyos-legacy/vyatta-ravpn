@@ -1,0 +1,5 @@
+help: Enable Fragmentation Support for Windows Peers.
+type: txt
+syntax:expression: $VAR(@) in "enable", "disable"; "must be enabled or disabled"
+val_help: enable; Enable Fragmentation 
+val_help: disable; Disable Fragmentation (default)

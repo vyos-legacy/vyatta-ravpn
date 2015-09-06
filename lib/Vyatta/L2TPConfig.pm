@@ -31,6 +31,7 @@ my %fields = (
   _mtu              => undef,
   _ike_lifetime     => undef,
   _auth_require     => undef,
+  _fragmentation	=> undef,
   _auth_local       => [],
   _auth_radius      => [],
   _auth_radius_keys => [],
@@ -67,6 +68,7 @@ sub setup {
   $self->{_ike_lifetime} = $config->returnValue('ipsec-settings ike-lifetime');
   $self->{_psk}
     = $config->returnValue('ipsec-settings authentication pre-shared-secret');
+  $self->{_fragmentation} = $config->returnValue('ipsec-settings fragmentation');
   my $pfx = 'ipsec-settings authentication x509';
   $self->{_x509_cacert} = $config->returnValue("$pfx ca-cert-file");
   $self->{_x509_crl} = $config->returnValue("$pfx crl-file");
@@ -81,7 +83,6 @@ sub setup {
   $self->{_auth_mode} = $config->returnValue('authentication mode');
   $self->{_auth_require} = $config->returnValue('authentication require');
   $self->{_mtu} = $config->returnValue('mtu');
-
   my @users = $config->listNodes('authentication local-users username');
   foreach my $user (@users) {
     my $plvl = "authentication local-users username $user password";
@@ -146,6 +147,7 @@ sub setupOrig {
                             'ipsec-settings ike-lifetime');
   $self->{_psk} = $config->returnOrigValue(
                             'ipsec-settings authentication pre-shared-secret');
+  $self->{_fragmentation} = $config->returnOrigValue('ipsec-settings fragmentation');
   my $pfx = 'ipsec-settings authentication x509';
   $self->{_x509_cacert} = $config->returnOrigValue("$pfx ca-cert-file");
   $self->{_x509_crl} = $config->returnOrigValue("$pfx crl-file");
@@ -391,6 +393,10 @@ sub get_ra_conn {
     if (defined($onh) && defined($self->{_dhcp_if}));
   my $onhstr = (defined($onh) ? "  leftnexthop=$onh\n" : "");
   my $auth_str = "  authby=secret\n";
+  my $fragmentation;
+  if (defined($self->{_fragmentation}) && $_self->{_fragmentation} eq 'enable') {
+	$fragmentation = "  fragmentation=yes\n";
+  }
   return (undef, "IPsec authentication mode not defined")
     if (!defined($self->{_mode}));
   if ($self->{_mode} eq 'x509') {
@@ -412,7 +418,9 @@ conn $name
 ${auth_str}  type=transport
   keyexchange=ikev1
   left=$oaddr
-${onhstr}  leftprotoport=17/1701
+${onhstr}
+${fragmentation}
+  leftprotoport=17/1701
   right=%any
   rightprotoport=17/%any
   auto=add

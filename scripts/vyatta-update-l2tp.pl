@@ -37,7 +37,7 @@ if ($config->isEmpty()) {
     system("/etc/init.d/xl2tpd stop >&/dev/null");
     # remove remote-access vpn connections
     system ("ipsec rereadall >&/dev/null");
-    system ("ipsec update >&/dev/null");
+    system ("ipsec reload >&/dev/null");
   }
   exit 0;
 }
@@ -135,7 +135,7 @@ if (!($config->maybeClustering($gconfig, @ipsec_ifs))) {
 # only do this if we are not doing clustering.
 if (!($config->maybeClustering($gconfig, @ipsec_ifs))) {
   system ("ipsec rereadall >&/dev/null");
-  system ("ipsec update >&/dev/null");
+  system ("ipsec reload >&/dev/null");
 }
 
 if (!($config->isDifferentFrom($oconfig))) {
@@ -149,7 +149,7 @@ if (!($config->maybeClustering($gconfig, @ipsec_ifs))
   system("kill -TERM `pgrep -f 'name VyattaL2TPServer'` >&/dev/null");
   # update ipsec.conf for remote-access connections
   system ("ipsec rereadall >&/dev/null");
-  system ("ipsec update >&/dev/null");
+  system ("ipsec reload >&/dev/null");
   # restart L2TP server
   system("/etc/init.d/xl2tpd stop >&/dev/null");
   system("/etc/init.d/xl2tpd start >&/dev/null");

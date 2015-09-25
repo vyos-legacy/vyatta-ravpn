@@ -394,7 +394,7 @@ sub get_ra_conn {
   my $onhstr = (defined($onh) ? "  leftnexthop=$onh\n" : "");
   my $auth_str = "  authby=secret\n";
   my $fragmentation;
-  if (defined($self->{_fragmentation}) && $_self->{_fragmentation} eq 'enable') {
+  if (defined($self->{_fragmentation}) && $self->{_fragmentation} eq 'enable') {
 	$fragmentation = "  fragmentation=yes\n";
   }
   return (undef, "IPsec authentication mode not defined")

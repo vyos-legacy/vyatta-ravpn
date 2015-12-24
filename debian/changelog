@@ -1,3 +1,17 @@
+vyatta-ravpn (0.12.45+vyos2+lithium7) lithium; urgency=low
+
+  [ Carl Byington ]
+  * idle timeout and ESP lifetime options from
+    <http://www.proppedup.org/2011/09/28/vyatta-6-3-remote-access-
+    patch/>
+  * idle timeout and ESP lifetime options from
+    <http://www.proppedup.org/2011/09/28/vyatta-6-3-remote-access-
+    patch/>
+
+  [ Daniil Baturin ]
+
+ -- Daniil Baturin <daniil@baturin.org>  Thu, 24 Dec 2015 12:29:15 +0100
+
 vyatta-ravpn (0.12.45+vyos2+lithium6) lithium; urgency=low
 
   * vyatta-ravpn: update dh_gencontrol with new development build flag

@@ -1,3 +1,13 @@
+vyatta-ravpn (0.12.45+vyos2+current1) lithium; urgency=medium
+
+  [ Thomas Jepp ]
+  * Fix build depends.
+  * Change libradiusclient-ng2 to libfreeradius-client2.
+
+  [ Kim Hagen ]
+
+ -- Kim Hagen <kim.sidney@gmail.com>  Sun, 24 Jan 2016 15:25:07 -0500
+
 vyatta-ravpn (0.12.45+vyos2+lithium7) lithium; urgency=low
 
   [ Carl Byington ]

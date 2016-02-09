@@ -18,7 +18,7 @@ my $FILE_L2TP_OPTS = '/etc/xl2tpd/xl2tpd.conf';
 my $IPSEC_CTL_FILE = '/var/run/pluto.ctl';
 my $FILE_RADIUS_CONF = '/etc/radiusclient-ng/radiusclient-l2tp.conf';
 my $FILE_RADIUS_KEYS = '/etc/radiusclient-ng/servers-l2tp';
-my $FILE_DHCP_HOOK = '/etc/dhcp3/dhclient-exit-hooks.d/l2tpd';
+my $FILE_DHCP_HOOK = '/etc/dhcp/dhclient-exit-hooks.d/l2tpd';
 
 my $gconfig = new Vyatta::Config;
 my $config = new Vyatta::L2TPConfig;

@@ -10,7 +10,7 @@ my $FILE_PPTP_OPTS = '/etc/pptpd.conf';
 my $PPTP_INIT = '/etc/init.d/pptpd';
 my $FILE_RADIUS_CONF = '/etc/radiusclient-ng/radiusclient-pptp.conf';
 my $FILE_RADIUS_KEYS = '/etc/radiusclient-ng/servers-pptp';
-my $FILE_DHCP_SCRIPT = '/etc/dhcp3/dhclient-exit-hooks.d/pptpd';
+my $FILE_DHCP_SCRIPT = '/etc/dhcp/dhclient-exit-hooks.d/pptpd';
 
 my $config = new Vyatta::PPTPConfig;
 my $oconfig = new Vyatta::PPTPConfig;

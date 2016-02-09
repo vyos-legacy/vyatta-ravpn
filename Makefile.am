@@ -30,11 +30,11 @@ install-exec-hook:
 	mkdir -p $(DESTDIR)/etc/ppp/ip-pre-up.d \
 	         $(DESTDIR)/etc/ppp/ip-up.d \
 	         $(DESTDIR)/etc/ppp/ip-down.d \
-					 $(DESTDIR)/etc/dhcp3/dhclient-exit-hooks.d
+					 $(DESTDIR)/etc/dhcp/dhclient-exit-hooks.d
 	cp scripts/rename-l2tp $(DESTDIR)/etc/ppp/ip-pre-up.d/0004rename-l2tp
 	chmod 755 $(DESTDIR)/etc/ppp/ip-pre-up.d/0004rename-l2tp
 	cp scripts/rename-pptp $(DESTDIR)/etc/ppp/ip-pre-up.d/0005rename-pptp
 	chmod 755 $(DESTDIR)/etc/ppp/ip-pre-up.d/0005rename-pptp
-	cp scripts/pptpd-dhclient-hook $(DESTDIR)/etc/dhcp3/dhclient-exit-hooks.d/pptpd
-	cp scripts/l2tp-dhclient-hook $(DESTDIR)/etc/dhcp3/dhclient-exit-hooks.d/l2tpd
+	cp scripts/pptpd-dhclient-hook $(DESTDIR)/etc/dhcp/dhclient-exit-hooks.d/pptpd
+	cp scripts/l2tp-dhclient-hook $(DESTDIR)/etc/dhcp/dhclient-exit-hooks.d/l2tpd
 

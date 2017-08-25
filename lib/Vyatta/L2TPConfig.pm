@@ -428,13 +428,16 @@ conn $name-mac-zzz
   also=$name
 
 conn $name
-${auth_str}  pfs=no
+${auth_str}  installpolicy=yes
+  type=transport
+  pfs=no
   left=$oaddr
 ${onhstr}  leftprotoport=17/1701
   right=%any
   rightsubnet=vhost:%no,%priv
+  rightsubnet=0.0.0.0/0
   auto=add
-  ike=aes256-sha1,3des-sha1!
+  ike=aes256-sha1,3des-sha1,3des-sha1-modp1024!
   dpddelay=15
   dpdtimeout=45
   dpdaction=clear

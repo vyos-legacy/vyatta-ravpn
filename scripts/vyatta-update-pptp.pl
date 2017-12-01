@@ -8,8 +8,8 @@ my $FILE_CHAP_SECRETS = '/etc/ppp/secrets/chap-ravpn';
 my $FILE_PPP_OPTS = '/etc/ppp/options.pptpd';
 my $FILE_PPTP_OPTS = '/etc/pptpd.conf';
 my $PPTP_INIT = '/etc/init.d/pptpd';
-my $FILE_RADIUS_CONF = '/etc/radiusclient-ng/radiusclient-pptp.conf';
-my $FILE_RADIUS_KEYS = '/etc/radiusclient-ng/servers-pptp';
+my $FILE_RADIUS_CONF = '/etc/radiusclient/radiusclient-pptp.conf';
+my $FILE_RADIUS_KEYS = '/etc/radiusclient/servers-pptp';
 my $FILE_DHCP_SCRIPT = '/etc/dhcp/dhclient-exit-hooks.d/pptpd';
 
 my $config = new Vyatta::PPTPConfig;

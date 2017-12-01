@@ -505,7 +505,7 @@ sub get_ppp_opts {
   if ($self->{_auth_mode} eq 'radius') {
     $rstr =<<EOS;
 plugin radius.so
-radius-config-file /etc/radiusclient-ng/radiusclient-l2tp.conf
+radius-config-file /etc/radiusclient/radiusclient-l2tp.conf
 plugin radattr.so
 EOS
   }
@@ -561,12 +561,12 @@ auth_order      radius
 login_tries     4
 login_timeout   60
 nologin /etc/nologin
-issue   /etc/radiusclient-ng/issue
-${authstr}${acctstr}servers         /etc/radiusclient-ng/servers-l2tp
-dictionary      /etc/radiusclient-ng/dictionary-ravpn
+issue   /etc/radiusclient/issue
+${authstr}${acctstr}servers         /etc/radiusclient/servers-l2tp
+dictionary      /etc/radiusclient/dictionary-ravpn
 login_radius    /usr/sbin/login.radius
 seqfile         /var/run/radius.seq
-mapfile         /etc/radiusclient-ng/port-id-map-ravpn
+mapfile         /etc/radiusclient/port-id-map-ravpn
 default_realm
 radius_timeout  10
 radius_retries  3

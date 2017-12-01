@@ -14,11 +14,11 @@ done
 sed '1,/start-stop-daemon/s/start-stop-daemon --start/start-stop-daemon --start --oknodo/' -i /etc/init.d/xl2tpd
 
 for cfg in /etc/ipsec.d/tunnels/remote-access \
-           /etc/radiusclient-ng/radiusclient-pptp.conf \
-           /etc/radiusclient-ng/servers-pptp \
-           /etc/radiusclient-ng/radiusclient-l2tp.conf \
-           /etc/radiusclient-ng/servers-l2tp \
-           /etc/radiusclient-ng/port-id-map-ravpn \
+           /etc/radiusclient/radiusclient-pptp.conf \
+           /etc/radiusclient/servers-pptp \
+           /etc/radiusclient/radiusclient-l2tp.conf \
+           /etc/radiusclient/servers-l2tp \
+           /etc/radiusclient/port-id-map-ravpn \
            /etc/ppp/secrets/chap-ravpn \
            /etc/ppp/options.xl2tpd \
            /etc/ppp/options.pptpd; do
@@ -37,12 +37,12 @@ fi
 chmod 600 /etc/ppp/secrets/chap-ravpn
 
 cp -f ${sysconfdir}/ravpn/radius-dictionary.microsoft \
-  /etc/radiusclient-ng/dictionary.microsoft
-cp -f /etc/radiusclient-ng/dictionary /etc/radiusclient-ng/dictionary-ravpn
-echo 'INCLUDE /etc/radiusclient-ng/dictionary.merit' \
-  >> /etc/radiusclient-ng/dictionary-ravpn
-echo 'INCLUDE /etc/radiusclient-ng/dictionary.microsoft' \
-  >> /etc/radiusclient-ng/dictionary-ravpn
+  /etc/radiusclient/dictionary.microsoft
+cp -f /etc/radiusclient/dictionary /etc/radiusclient/dictionary-ravpn
+echo 'INCLUDE /etc/radiusclient/dictionary.merit' \
+  >> /etc/radiusclient/dictionary-ravpn
+echo 'INCLUDE /etc/radiusclient/dictionary.microsoft' \
+  >> /etc/radiusclient/dictionary-ravpn
 
 mkdir -p ${sysconfdir}/ravpn/sessions
 

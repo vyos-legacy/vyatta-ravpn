@@ -16,8 +16,8 @@ my $FILE_CHAP_SECRETS = '/etc/ppp/secrets/chap-ravpn';
 my $FILE_PPP_OPTS = '/etc/ppp/options.xl2tpd';
 my $FILE_L2TP_OPTS = '/etc/xl2tpd/xl2tpd.conf';
 my $IPSEC_CTL_FILE = '/var/run/charon.ctl';
-my $FILE_RADIUS_CONF = '/etc/radiusclient-ng/radiusclient-l2tp.conf';
-my $FILE_RADIUS_KEYS = '/etc/radiusclient-ng/servers-l2tp';
+my $FILE_RADIUS_CONF = '/etc/radiusclient/radiusclient-l2tp.conf';
+my $FILE_RADIUS_KEYS = '/etc/radiusclient/servers-l2tp';
 my $FILE_DHCP_HOOK = '/etc/dhcp/dhclient-exit-hooks.d/l2tpd';
 
 my $gconfig = new Vyatta::Config;

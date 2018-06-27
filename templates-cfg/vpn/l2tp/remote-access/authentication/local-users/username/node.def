@@ -1,4 +1,4 @@
 tag:
 help: User name for authentication
 type: txt
-syntax:expression: exec "${vyos_libexec_dir}/validate-value.py --regex \'^[a-zA-Z0-9\-_]{1,100}\'  --value \'$VAR(@)\'"; "alphanumerical characters, hyphen and underscore allowed only, up to a limit of 100 chars"
+syntax:expression: exec "${vyos_libexec_dir}/validate-value.py --regex \'^[a-zA-Z0-9_]{1,100}\'  --value \'$VAR(@)\'"; "Illegal characters in username or longer than 100 chars"

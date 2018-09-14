@@ -71,7 +71,7 @@ foreach my $line (@lines){
   print ${output_secrets} $line;
 }
 close $output_secrets;
-system("kill -TERM `pgrep -f 'name VyattaL2TPServer'` >&/dev/null");
+system("kill -TERM `pgrep -f 'name VyOSL2TPServer'` >&/dev/null");
 system ("/usr/sbin/ipsec rereadall");
 system ("/usr/sbin/ipsec update");
 system("sudo /etc/init.d/xl2tpd stop");

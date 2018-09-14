@@ -32,7 +32,7 @@ if ($config->isEmpty()) {
     # clear the dhclient hook
     system("echo '' > $FILE_DHCP_HOOK");
     # kill existing PPP sessions
-    system("kill -TERM `pgrep -f 'name VyattaL2TPServer'` >&/dev/null");
+    system("kill -TERM `pgrep -f 'name VyOSL2TPServer'` >&/dev/null");
     # stop L2TP server
     system("/etc/init.d/xl2tpd stop >&/dev/null");
     # remove remote-access vpn connections
@@ -146,7 +146,7 @@ if (!($config->isDifferentFrom($oconfig))) {
 if (!($config->maybeClustering($gconfig, @ipsec_ifs))
     && $config->needsRestart($oconfig)) {
   # kill existing PPP sessions
-  system("kill -TERM `pgrep -f 'name VyattaL2TPServer'` >&/dev/null");
+  system("kill -TERM `pgrep -f 'name VyOSL2TPServer'` >&/dev/null");
   # update ipsec.conf for remote-access connections
   system ("ipsec rereadall >&/dev/null");
   system ("ipsec update >&/dev/null");

@@ -6,8 +6,8 @@ use Vyatta::Config;
 use Vyatta::Misc;
 use NetAddr::IP;
 
-my $cfg_delim_begin = '### Vyatta L2TP VPN Begin ###';
-my $cfg_delim_end = '### Vyatta L2TP VPN End ###';
+my $cfg_delim_begin = '### VyOS L2TP VPN Begin ###';
+my $cfg_delim_end = '### VyOS L2TP VPN End ###';
 
 my $CA_CERT_PATH = '/etc/ipsec.d/cacerts';
 my $CRL_PATH = '/etc/ipsec.d/crls';
@@ -401,7 +401,7 @@ sub get_ra_conn {
   return (undef, "outside-nexthop cannot be defined with dhcp-interface")
     if (defined($onh) && defined($self->{_dhcp_if}));
   my $onhstr = (defined($onh) ? "  leftnexthop=$onh\n" : "");
-  my $auth_str = "  authby=secret\n";
+  my $auth_str = "authby=secret\n  leftauth=psk\n  rightauth=psk";
   return (undef, "IPsec authentication mode not defined")
     if (!defined($self->{_mode}));
   if ($self->{_mode} eq 'x509') {
@@ -419,30 +419,20 @@ EOS
   }
   my $str =<<EOS;
 $cfg_delim_begin
-conn $name-win-aaa
-  rightprotoport=17/1701
-  also=$name
-
-conn $name-mac-zzz
-  rightprotoport=17/%any
-  also=$name
-
 conn $name
-${auth_str}  installpolicy=yes
   type=transport
-  pfs=no
   left=$oaddr
-${onhstr}  leftprotoport=17/1701
-  right=%any
-  rightsubnet=vhost:%no,%priv
-  rightsubnet=0.0.0.0/0
+  leftsubnet=%dynamic[/1701]
+  rightsubnet=%dynamic
+  mark=%unique
   auto=add
-  ike=aes256-sha1,3des-sha1,3des-sha1-modp1024!
+  ike=aes256-sha1-modp1024,3des-sha1-modp1024,3des-sha1-modp1024!
   dpddelay=15
   dpdtimeout=45
   dpdaction=clear
   esp=aes256-sha1,3des-sha1!
   rekey=no
+  $auth_str
 EOS
   if (defined($self->{_ike_lifetime})){
     $str .= "  ikelifetime=$self->{_ike_lifetime}\n";

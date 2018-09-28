@@ -1,3 +1,9 @@
+vyatta-ravpn (1.2.0-1) stable; urgency=medium
+
+  * New branch.
+
+ -- Daniil Baturin <daniil@baturin.org>  Fri, 28 Sep 2018 22:17:37 +0200
+
 vyatta-ravpn (0.12.45+vyos2+current2) unstable; urgency=medium
 
   * Update the config syntax of remote access connection for StrongSWAN 5.6

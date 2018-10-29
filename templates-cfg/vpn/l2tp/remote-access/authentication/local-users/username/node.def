@@ -1,4 +1,3 @@
 tag:
 help: User name for authentication
 type: txt
-syntax:expression: exec "${vyos_libexec_dir}/validate-value.py --regex \'^[a-zA-Z0-9\-_]+\'  --value \'$VAR(@)\'"; "User names may contain only alphanumerical characters, hyphens, and underscores"

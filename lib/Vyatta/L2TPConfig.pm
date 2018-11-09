@@ -28,6 +28,7 @@ my %fields = (
   _client_ip_start  => undef,
   _client_ip_stop   => undef,
   _auth_mode        => undef,
+  _radius_source    => undef,
   _mtu              => undef,
   _idle             => undef,
   _ike_lifetime     => undef,
@@ -128,6 +129,13 @@ sub setup {
     $self->{_wins} = [ @{$self->{_wins}}, $tmp ];
   }
 
+  $tmp = $config->returnValue('authentication radius-source-address');
+  if (defined($tmp)) {
+    $self->{_radius_source} = $tmp;
+  } else {
+    $self->{_radius_source} = "*";
+  }
+
   return 0;
 }
 
@@ -164,6 +172,7 @@ sub setupOrig {
   $self->{_client_ip_start} = $config->returnOrigValue('client-ip-pool start');
   $self->{_client_ip_stop} = $config->returnOrigValue('client-ip-pool stop');
   $self->{_auth_mode} = $config->returnOrigValue('authentication mode');
+  $self->{_radius_source} = $config->returnValue('authentication radius-source-address');
   $self->{_auth_require} = $config->returnValue('authentication require');
   $self->{_mtu} = $config->returnOrigValue('mtu');
   $self->{_idle} = $config->returnOrigValue('idle');
@@ -251,6 +260,7 @@ sub isDifferentFrom {
   return 1 if ($this->{_client_ip_start} ne $that->{_client_ip_start});
   return 1 if ($this->{_client_ip_stop} ne $that->{_client_ip_stop});
   return 1 if ($this->{_auth_mode} ne $that->{_auth_mode});
+  return 1 if ($this->{_radius_source} ne $that->{_radius_source});
   return 1 if ($this->{_auth_require} ne $that->{_auth_require});
   return 1 if ($this->{_mtu} ne $that->{_mtu});
   return 1 if ($this->{_idle} ne $that->{_idle});
@@ -542,6 +552,7 @@ sub get_radius_conf {
   foreach my $auth (@auths) {
     $authstr .= "authserver      $auth\n";
   }
+  my $bindaddr = $self->{_radius_source};
   my $acctstr = $authstr;
   $acctstr =~ s/auth/acct/g;
 
@@ -561,6 +572,7 @@ default_realm
 radius_timeout  10
 radius_retries  3
 login_local     /bin/login
+bindaddr        ${bindaddr}
 $cfg_delim_end
 EOS
   return ($str, undef);

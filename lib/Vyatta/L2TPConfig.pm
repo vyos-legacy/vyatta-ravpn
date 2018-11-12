@@ -219,6 +219,13 @@ sub setupOrig {
     $self->{_wins} = [ @{$self->{_wins}}, $tmp ];
   }
 
+  $tmp = $config->returnValue('authentication radius-source-address');
+  if (defined($tmp)) {
+    $self->{_radius_source} = $tmp;
+  } else {
+    $self->{_radius_source} = "*";
+  }
+
   return 0;
 }
 

@@ -15,6 +15,7 @@ my %fields = (
   _out_addr         => undef,
   _dhcp_iface       => undef,
   _auth_mode        => undef,
+  _radius_source    => undef,
   _auth_require     => undef,
   _mtu              => undef,
   _auth_local       => [],
@@ -100,6 +101,13 @@ sub setup {
     $self->{_wins} = [ @{$self->{_wins}}, $tmp ];
   }
 
+  $tmp = $config->returnValue('authentication radius-source-address');
+  if (defined($tmp)) {
+    $self->{_radius_source} = $tmp;
+  } else {
+    $self->{_radius_source} = "*";
+  }
+
   return 0;
 }
 
@@ -166,6 +174,13 @@ sub setupOrig {
     $self->{_wins} = [ @{$self->{_wins}}, $tmp ];
   }
 
+  $tmp = $config->returnValue('authentication radius-source-address');
+  if (defined($tmp)) {
+    $self->{_radius_source} = $tmp;
+  } else {
+    $self->{_radius_source} = "*";
+  }
+
   return 0;
 }
 
@@ -189,6 +204,7 @@ sub isDifferentFrom {
   return 1 if ($this->{_client_ip_start} ne $that->{_client_ip_start});
   return 1 if ($this->{_client_ip_stop} ne $that->{_client_ip_stop});
   return 1 if ($this->{_auth_mode} ne $that->{_auth_mode});
+  return 1 if ($this->{_radius_source} ne $that->{_radius_source});
   return 1 if ($this->{_auth_require} ne $that->{_auth_require});
   return 1 if ($this->{_mtu} ne $that->{_mtu});
   return 1 if (listsDiff($this->{_auth_local}, $that->{_auth_local}));
@@ -315,6 +331,7 @@ sub get_radius_conf {
   foreach my $auth (@auths) {
     $authstr .= "authserver      $auth\n";
   }
+  my $bindaddr = $self->{_radius_source};
   my $acctstr = $authstr;
   $acctstr =~ s/auth/acct/g;
 
@@ -334,6 +351,7 @@ default_realm
 radius_timeout  10
 radius_retries  3
 login_local     /bin/login
+bindaddr        ${bindaddr}
 $cfg_delim_end
 EOS
   return ($str, undef);

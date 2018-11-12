@@ -72,10 +72,10 @@ sub setup {
     $self->{_auth_local} = [ @{$self->{_auth_local}}, $user, $pass, $disable, $ip ];
   }
   
-  my @rservers = $config->listNodes('authentication radius-server');
+  my @rservers = $config->listNodes('authentication radius server');
   foreach my $rserver (@rservers) {
     my $key = $config->returnValue(
-                        "authentication radius-server $rserver key");
+                        "authentication radius server $rserver key");
     $self->{_auth_radius} = [ @{$self->{_auth_radius}}, $rserver ];
     if (defined($key)) {
       $self->{_auth_radius_keys} = [ @{$self->{_auth_radius_keys}}, $key ];
@@ -101,7 +101,7 @@ sub setup {
     $self->{_wins} = [ @{$self->{_wins}}, $tmp ];
   }
 
-  $tmp = $config->returnValue('authentication radius-source-address');
+  $tmp = $config->returnValue('authentication radius source-address');
   if (defined($tmp)) {
     $self->{_radius_source} = $tmp;
   } else {
@@ -145,10 +145,10 @@ sub setupOrig {
     $self->{_auth_local} = [ @{$self->{_auth_local}}, $user, $pass, $disable, $ip ];
   }
   
-  my @rservers = $config->listOrigNodes('authentication radius-server');
+  my @rservers = $config->listOrigNodes('authentication radius server');
   foreach my $rserver (@rservers) {
     my $key = $config->returnOrigValue(
-                        "authentication radius-server $rserver key");
+                        "authentication radius server $rserver key");
     $self->{_auth_radius} = [ @{$self->{_auth_radius}}, $rserver ];
     if (defined($key)) {
       $self->{_auth_radius_keys} = [ @{$self->{_auth_radius_keys}}, $key ];
@@ -174,7 +174,7 @@ sub setupOrig {
     $self->{_wins} = [ @{$self->{_wins}}, $tmp ];
   }
 
-  $tmp = $config->returnValue('authentication radius-source-address');
+  $tmp = $config->returnValue('authentication radius source-address');
   if (defined($tmp)) {
     $self->{_radius_source} = $tmp;
   } else {

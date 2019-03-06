@@ -1,5 +1,0 @@
-type: txt
-help: Authentication mode for remote access PPTP VPN
-syntax:expression: $VAR(@) in "local", "radius"; "Authentication mode must be \"local\" or \"radius\""
-val_help: local; Use username/password in the configuration
-val_help: radius; Use Radius server

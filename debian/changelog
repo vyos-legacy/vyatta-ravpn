@@ -1,3 +1,12 @@
+vyatta-ravpn (0.12.45+vyos2+current3) unstable; urgency=medium
+
+  * T833: accel-ppp: pptp implementation
+
+    - removal of the template files which are now being handled by accel-pptp
+    - scripts/vyatta-update-pptp.pl left in place for now
+
+ -- hagbard <vyosdev@derith.de>  Wed, 06 Mar 2019 10:51:27 -0800
+
 vyatta-ravpn (0.12.45+vyos2+current2) unstable; urgency=medium
 
   * Update the config syntax of remote access connection for StrongSWAN 5.6

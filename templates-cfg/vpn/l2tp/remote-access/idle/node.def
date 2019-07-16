@@ -1,5 +1,0 @@
-help: PPP idle timeout
-type: u32 
-default: 1800
-syntax:expression: ($VAR(@) >= 30 && $VAR(@) <= 86400) ; "must be in the range 30 to 86400 seconds"
-val_help: u32:30-86400; PPP idle timeout in seconds (default 1800)

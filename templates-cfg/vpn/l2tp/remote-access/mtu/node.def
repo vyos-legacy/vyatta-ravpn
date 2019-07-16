@@ -1,5 +1,0 @@
-type: u32
-help: Maximum Transmission Unit (MTU)
-syntax:expression: $VAR(@) >= 128 && $VAR(@) <= 16384;
-                   "MTU must be between 128 and 16384 bytes"
-val_help: u32:128-16384; Maximum Transmission Unit (MTU)

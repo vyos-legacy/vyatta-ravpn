@@ -1,3 +1,0 @@
-help: Show active remote access Virtual Private Network (VPN) sessions
-allowed: ""
-run: ${vyatta_sbindir}/vyatta-show-ravpn.pl

@@ -441,7 +441,6 @@ conn $name
   left=$oaddr
   leftsubnet=%dynamic[/1701]
   rightsubnet=%dynamic
-  mark=%unique
   auto=add
   ike=aes256-sha1-modp1024,3des-sha1-modp1024,3des-sha1-modp1024!
   dpddelay=15

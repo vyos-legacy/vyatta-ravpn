@@ -1,2 +1,0 @@
-help: Terminate all user's current remote access VPN session(s) with PPTP protocol
-run: sudo ${vyatta_bindir}/sudo-users/vyatta-kick-ravpn.pl --username="all_users" --protocol="pptp"

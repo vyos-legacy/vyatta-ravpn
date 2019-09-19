@@ -1,7 +1,0 @@
-help: Terminate specified user's current remote access VPN session(s) with L2TP protocol
-allowed: local -a a1;
-         a1=( /opt/vyatta/etc/ravpn/sessions/*@l2tp* );
-         local -a a2;
-         a2=( "${a1[@]%@*}" );
-         echo -n ${a2[@]##*/};
-run: sudo ${vyatta_bindir}/sudo-users/vyatta-kick-ravpn.pl --username="$5" --protocol="l2tp"

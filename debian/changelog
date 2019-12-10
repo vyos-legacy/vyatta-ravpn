@@ -1,3 +1,9 @@
+vyatta-ravpn (1.2.4) unstable; urgency=low
+
+  * New release.
+
+ -- VyOS maintainers <maintainers@vyos.io>  Tue, 10 Dec 2019 23:40:06 +0200
+
 vyatta-ravpn (1.2.0-1) stable; urgency=medium
 
   * New branch.
@@ -605,4 +611,3 @@ vyatta-ravpn (0.1) unstable; urgency=low
   * Initial Release.
 
  -- An-Cheng Huang <ancheng@vyatta.com>  Fri, 28 Dec 2007 13:49:53 -0700
-

@@ -616,6 +616,10 @@ sub get_l2tp_conf {
     $oaddr = get_dhcp_addr($dhcpif);
   }
   return (undef, 'Outside address not defined') if (!defined($oaddr));
+  my $c_oaddr = '';
+  if ($oaddr ne "0.0.0.0"){
+    $c_oaddr = 'listen-addr = '.$oaddr;
+  }
   my $cstart = $self->{_client_ip_start};
   return (undef, 'Client IP pool start not defined') if (!defined($cstart));
   my $cstop = $self->{_client_ip_stop};
@@ -637,7 +641,7 @@ sub get_l2tp_conf {
   my $str =<<EOS;
 ;$cfg_delim_begin
 [global]
-listen-addr = $oaddr
+$c_oaddr
 
 [lns default]
 ip range = $cstart-$cstop
@@ -703,6 +707,7 @@ EOM
 sub maybeClustering {
   my ($self, $config, @interfaces) = @_;
   return 0 if (defined($self->{_dhcp_if}));
+  return 0 if ($self->{_out_addr} eq "0.0.0.0");
   return (!(Vyatta::Misc::isIPinInterfaces($config, $self->{_out_addr},
                                          @interfaces)));
 }

@@ -3,5 +3,8 @@ allowed: local -a a1;
          a1=( /opt/vyatta/etc/ravpn/sessions/*@pptp* /opt/vyatta/etc/ravpn/sessions/*@l2tp* );
          local -a a2;
          a2=( "${a1[@]%@*}" );
-         echo -n ${a2[@]##*/};
+         for i in ${a2[@]};
+           do
+             echo ${i##*/}  | egrep -v "@*tp"
+           done
 run: sudo ${vyatta_bindir}/sudo-users/vyatta-kick-ravpn.pl --username="$5"

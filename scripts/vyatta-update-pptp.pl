@@ -68,7 +68,7 @@ exit 1 if (!$config->writeCfg($FILE_PPTP_OPTS, $pptp_conf, 0, 0));
 exit 1 if (!$config->writeCfg($FILE_RADIUS_CONF, $radius_conf, 0, 0));
 exit 1 if (!$config->writeCfg($FILE_RADIUS_KEYS, $radius_keys, 0, 0));
 
-system('cat /etc/ppp/secrets/chap-* > /etc/ppp/chap-secrets');
+system('cat /etc/ppp/secrets/chap-* > /etc/ppp/chap-secrets && chmod 600 /etc/ppp/chap-secrets');
 if ($? >> 8) {
   print STDERR <<EOM;
 PPTP VPN configuration error: Cannot write chap-secrets.

@@ -524,10 +524,8 @@ ipcp-accept-local
 ipcp-accept-remote
 ${sstr}noccp
 auth
-crtscts
 nodefaultroute
 debug
-lock
 proxyarp
 connect-delay 5000
 EOS
